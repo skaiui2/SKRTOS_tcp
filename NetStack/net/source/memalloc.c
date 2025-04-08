@@ -31,7 +31,7 @@ void heap_init( void )
 {
     heap_node *first_node;
     uintptr_t start_heap ,end_heap;
-    //get start address
+    
     start_heap =(uintptr_t)AllHeap;
     if( (start_heap & alignment_byte) != 0){
         start_heap += alignment_byte ;
@@ -62,15 +62,15 @@ void *heap_malloc(size_t WantSize)
     void *xReturn = NULL;
     WantSize += HeapStructSize;
     if((WantSize & alignment_byte) != 0x00) {
-        alignment_require_size = (alignment_byte + 1) - (WantSize & alignment_byte);//must 8-byte alignment
+        alignment_require_size = (alignment_byte + 1) - (WantSize & alignment_byte);
         WantSize += alignment_require_size;
-    }//You can add the TaskSuspend function ,that make here be an atomic operation
+    }
     if(TheHeap.tail== NULL ) {
         heap_init();
-    }//Resume
+    }
     prev_node = &TheHeap.head;
     use_node = TheHeap.head.next;
-    while((use_node->BlockSize) < WantSize) {//check the size is fit
+    while((use_node->BlockSize) < WantSize) {
         prev_node = use_node;
         use_node = use_node->next;
         if(use_node == NULL){
@@ -85,7 +85,7 @@ void *heap_malloc(size_t WantSize)
         use_node->BlockSize = WantSize;
         new_node->next = prev_node->next;
         prev_node->next = new_node;
-    }//Finish cutting
+    }
     TheHeap.AllSize-= use_node->BlockSize;
     use_node->next = NULL;
     return xReturn;
@@ -97,7 +97,7 @@ void heap_free(void *xReturn)
     heap_node *xlink;
     uint8_t *xFree = (uint8_t*)xReturn;
 
-    xFree -= HeapStructSize;//get the start address of the heap struct
+    xFree -= HeapStructSize;
     xlink = (void*)xFree;
     TheHeap.AllSize += xlink->BlockSize;
     InsertFreeBlock((heap_node*)xlink);

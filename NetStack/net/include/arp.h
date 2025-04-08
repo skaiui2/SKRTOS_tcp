@@ -28,16 +28,10 @@ struct arp_cache {
 };
 
 
-struct arp_packet {
-    struct eth_hdr eh;
-    struct arp_ether    ae;
-
-}__attribute__((packed));
-
 
 void arp_request();
 
-void arp_input(struct buf_struct *sk);
+void arp_input(struct buf_struct *sk, struct buf_struct *send_sk);
 void arp_timer();
 void arp_free();
 void arp_resolve();

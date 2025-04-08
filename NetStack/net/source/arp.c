@@ -1,12 +1,8 @@
 #include "arp.h"
 #include "tapif.h"
 #include "buf.h"
-#include "memalloc.h"
 #include "ifnet.h"
-#include <arpa/inet.h>
-#include <net/if_arp.h>
-#include <net/ethernet.h>
-#include <netinet/if_ether.h>
+
 
 struct arp_cache ac;
 
@@ -17,7 +13,7 @@ void arp_init()
 
 void arp_request()
 {
-    struct buf_struct *sk = buf_get();
+    struct buf_struct *sk = buf_get(sizeof(struct eth_hdr) + sizeof(struct arp_ether));
     uint8_t *data_arp = buf_data_ptr_add(sk, 128 - sizeof(struct arp_ether));
     
     struct arp_ether *arp = (struct arp_ether *)data_arp;
@@ -34,36 +30,32 @@ void arp_request()
 
 
 #include "debug.h"
-static void arp_reply(struct buf_struct *sk)
+static void arp_reply(struct buf_struct *sk, struct buf_struct *send_sk)
 {
-    struct arp_packet *ap = (struct arp_packet *)sk->data_buf;
-    struct arp_packet *pkt = heap_malloc(sizeof(struct arp_packet));
+    struct arp_ether *ap  = (struct arp_ether *)sk->data;
+    struct arp_ether *pkt = (struct arp_ether *)send_sk->data;
+    send_sk->data_len = sizeof(struct eth_hdr) + sizeof(struct arp_ether);
 
-    memcpy(pkt->eh.ether_dhost, ap->ae.arp_sha, 6);
-    memcpy(pkt->eh.ether_shost, OwnerNet.hwaddr, 6);
-    pkt->eh.ether_type = ap->eh.ether_type; 
-    
-    pkt->ae.ea_hdr.ar_hrd = htons(ARPHRD_ETHER);
-    pkt->ae.ea_hdr.ar_pro = ap->ae.ea_hdr.ar_pro;
-    pkt->ae.ea_hdr.ar_hln = 6;              
-    pkt->ae.ea_hdr.ar_pln = 4;            
-    pkt->ae.ea_hdr.ar_op  = htons(ARPOP_REPLY); 
-    memcpy(pkt->ae.arp_sha, OwnerNet.hwaddr, 6);
-    pkt->ae.arp_spa = OwnerNet.ipaddr.addr;
-    memcpy(pkt->ae.arp_tha, ap->ae.arp_sha, 6);
-    pkt->ae.arp_tpa = ap->ae.arp_spa;
+    pkt->ea_hdr.ar_hrd = htons(ARPHRD_ETHER);
+    pkt->ea_hdr.ar_pro = ap->ea_hdr.ar_pro;
+    pkt->ea_hdr.ar_hln = 6;              
+    pkt->ea_hdr.ar_pln = 4;            
+    pkt->ea_hdr.ar_op  = htons(ARPOP_REPLY); 
+    memcpy(pkt->arp_sha, OwnerNet.hwaddr, 6);
+    pkt->arp_spa = OwnerNet.ipaddr.addr;
+    memcpy(pkt->arp_tha, ap->arp_sha, 6);
+    pkt->arp_tpa = ap->arp_spa;
 
-    print_content((char *)pkt, sizeof(struct arp_packet));
+    print_content((char *)send_sk->data_buf, send_sk->data_len);
 
-    tapif_output((struct buf_struct *)pkt, sizeof(struct arp_packet));   
-    heap_free(pkt);
+    ether_output(send_sk);  
 }
 
 
-void arp_input(struct buf_struct *sk)
+void arp_input(struct buf_struct *sk, struct buf_struct *send_sk)
 { 
-    struct arp_packet *ap = (struct arp_packet *)sk->data_buf;
-    struct arp_hdr *ah = (struct arp_hdr *)&(ap->ae.ea_hdr);
+    struct arp_ether *ap = (struct arp_ether *)sk->data;
+    struct arp_hdr *ah = (struct arp_hdr *)&(ap->ea_hdr);
     
    // while(ac.node.next) 
    {
@@ -71,7 +63,7 @@ void arp_input(struct buf_struct *sk)
         switch (ntohs(ah->ar_op))
         {
         case ARPOP_REQUEST:
-            arp_reply(sk);
+            arp_reply(sk, send_sk);
         break;
         case ARPOP_REPLY:
 

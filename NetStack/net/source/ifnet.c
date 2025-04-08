@@ -28,5 +28,18 @@ void ifnet_init(char *ip, char *mac, uint16_t mtu)
     };
     parse_mac_address(mac, net->hwaddr); 
 
+    printf("MAC Address: %02x:%02x:%02x:%02x:%02x:%02x\n",
+           net->hwaddr[0], net->hwaddr[1], net->hwaddr[2],
+           net->hwaddr[3], net->hwaddr[4], net->hwaddr[5]);
+
+    printf("IP Address: ");
+    uint32_t ar = net->ipaddr.addr;
+    printf("%u.%u.%u.%u",
+           ar & 0xFF,
+           (ar >> 8) & 0xFF,
+           (ar >> 16) & 0xFF,
+           (ar >> 24) & 0xFF);
+    printf("\n");
+
 }
 

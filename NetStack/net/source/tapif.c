@@ -8,7 +8,7 @@
 #include <linux/if.h>
 #include <sys/select.h>
 #include "tapif.h"
-
+#include "debug.h"
 
 int fd;
 
@@ -41,17 +41,22 @@ struct buf_struct *tapif_input()
     char buf[MLEN];
     struct buf_struct *sk;
     int readlen = read(fd, buf, MLEN);
+    
     if (readlen < 0) {
         SYS_ERROR("read returned -1");
         return NULL;
     } 
 
-    sk = buf_get();
+    sk = buf_get(sizeof(struct buf_struct));
+    sk->data_len = readlen;
+    printf("read:%d\r\n", sk->data_len);
     if (sk == NULL) {
         SYS_ERROR("can't allocate buf");
         return NULL;
     }
     buf_copy(sk, buf, MLEN);
+    printf("read\r\n"); 
+    print_content(sk->data_buf, readlen);
     return sk;
 }
 

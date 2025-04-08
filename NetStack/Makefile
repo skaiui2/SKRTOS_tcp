@@ -430,30 +430,6 @@ net/source/mempool.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/mempool.c.s
 .PHONY : net/source/mempool.c.s
 
-net/source/netdev.o: net/source/netdev.c.o
-.PHONY : net/source/netdev.o
-
-# target to build an object file
-net/source/netdev.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/netdev.c.o
-.PHONY : net/source/netdev.c.o
-
-net/source/netdev.i: net/source/netdev.c.i
-.PHONY : net/source/netdev.i
-
-# target to preprocess a source file
-net/source/netdev.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/netdev.c.i
-.PHONY : net/source/netdev.c.i
-
-net/source/netdev.s: net/source/netdev.c.s
-.PHONY : net/source/netdev.s
-
-# target to generate assembly for a file
-net/source/netdev.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/netdev.c.s
-.PHONY : net/source/netdev.c.s
-
 net/source/tapif.o: net/source/tapif.c.o
 .PHONY : net/source/tapif.o
 
@@ -596,9 +572,6 @@ help:
 	@echo "... net/source/mempool.o"
 	@echo "... net/source/mempool.i"
 	@echo "... net/source/mempool.s"
-	@echo "... net/source/netdev.o"
-	@echo "... net/source/netdev.i"
-	@echo "... net/source/netdev.s"
 	@echo "... net/source/tapif.o"
 	@echo "... net/source/tapif.i"
 	@echo "... net/source/tapif.s"

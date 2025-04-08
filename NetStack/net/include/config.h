@@ -4,7 +4,7 @@
 
 #define alignment_byte               0x07
 #define config_heap   (60*1024)
-#define MLEN 128
+#define MLEN 256
 
 
 #endif

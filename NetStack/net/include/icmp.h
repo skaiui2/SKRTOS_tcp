@@ -10,7 +10,7 @@ struct icmp {
 
     union {
         unsigned char   ih_pptr;
-        struct in_addr  addr;   
+        struct ip_addr  addr;   
         struct ih_idseq {
             unsigned short  icmp_id;
             unsigned short  icmp_seq;
@@ -23,16 +23,15 @@ struct icmp {
 
     }icmp_hun;
     
-};
+}__attribute__((packed));
 
 
-void icmp_input();
+
+
+void icmp_input(struct buf_struct *sk, struct buf_struct *send_sk);
 void icmp_error();
 void icmp_reflect();
 void icmp_send();
-
-void construct_ping_reply(int fd, const unsigned char *src_mac, const unsigned char *dst_mac, uint32_t src_ip, uint32_t dst_ip);
-
 
 
 #endif

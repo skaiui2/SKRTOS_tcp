@@ -8,7 +8,7 @@ void print_buf_content(struct buf_struct *buf)
         return;
     }
 
-    size_t bytes_to_print = buf->len < 128 ? buf->len : 128;
+    size_t bytes_to_print = buf->data_len < MLEN ? buf->data_len : MLEN;
 
     printf("Printing %zu bytes from buffer:\n", bytes_to_print);
 

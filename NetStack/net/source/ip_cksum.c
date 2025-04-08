@@ -3,16 +3,21 @@
 
 unsigned short checksum(void *b, int len) 
 {
-    unsigned short *buf = b;
-    unsigned int sum = 0;
-    unsigned short result;
+    unsigned short *addr = (unsigned short *)b;
+    long sum = 0;
 
-    for (sum = 0; len > 1; len -= 2)
-        sum += *buf++;
-    if (len == 1)
-        sum += *(unsigned char *)buf;
-    sum = (sum >> 16) + (sum & 0xFFFF);
-    sum += (sum >> 16);
-    result = ~sum;
-    return result;
+    for (len; len > 1; len -= 2) {
+        sum += *(unsigned short *)addr++;
+        if (sum & 0x80000000) {
+            sum = (sum & 0xFFFF) + (sum >> 16);
+        }
+    }
+    if (len) {
+        sum += (unsigned short)(*(unsigned char *)addr);
+    }
+    while(sum >> 16) {
+        sum = (sum >> 16) + (sum & 0xFFFF);
+    }
+
+    return ~sum;
 }

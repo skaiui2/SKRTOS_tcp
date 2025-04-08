@@ -5,14 +5,12 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <arpa/inet.h>
-#include <arpa/inet.h>
 #include <string.h>
 #include <stdlib.h>
 #include <sys/select.h>
-#include <arpa/inet.h>
 #include <memory.h>
 #include <unistd.h> 
-
+ 
 
 
 #define class(class)    \
@@ -85,6 +83,52 @@ do {    \
 #define ETH_P_PAUSE	0x8808		/* IEEE Pause frames. See 802.3 31B */
 
 
+
+/* Ethernet protocol ID's */
+#define	ETHERTYPE_PUP		0x0200          /* Xerox PUP */
+#define ETHERTYPE_SPRITE	0x0500		/* Sprite */
+#define	ETHERTYPE_IP		0x0800		/* IP */
+#define	ETHERTYPE_ARP		0x0806		/* Address resolution */
+#define	ETHERTYPE_REVARP	0x8035		/* Reverse ARP */
+#define ETHERTYPE_AT		0x809B		/* AppleTalk protocol */
+#define ETHERTYPE_AARP		0x80F3		/* AppleTalk ARP */
+#define	ETHERTYPE_VLAN		0x8100		/* IEEE 802.1Q VLAN tagging */
+#define ETHERTYPE_IPX		0x8137		/* IPX */
+#define	ETHERTYPE_IPV6		0x86dd		/* IP protocol version 6 */
+#define ETHERTYPE_LOOPBACK	0x9000		/* used to test interfaces */
+
+
+
+/* ARP protocol HARDWARE identifiers. */
+#define ARPHRD_NETROM	0		/* From KA9Q: NET/ROM pseudo. */
+#define ARPHRD_ETHER 	1		/* Ethernet 10/100Mbps.  */
+#define	ARPHRD_EETHER	2		/* Experimental Ethernet.  */
+#define	ARPHRD_AX25	3		/* AX.25 Level 2.  */
+#define	ARPHRD_PRONET	4		/* PROnet token ring.  */
+#define	ARPHRD_CHAOS	5		/* Chaosnet.  */
+#define	ARPHRD_IEEE802	6		/* IEEE 802.2 Ethernet/TR/TB.  */
+#define	ARPHRD_ARCNET	7		/* ARCnet.  */
+#define	ARPHRD_APPLETLK	8		/* APPLEtalk.  */
+#define	ARPHRD_DLCI	15		/* Frame Relay DLCI.  */
+#define	ARPHRD_ATM	19		/* ATM.  */
+#define	ARPHRD_METRICOM	23		/* Metricom STRIP (new IANA id).  */
+#define ARPHRD_IEEE1394	24		/* IEEE 1394 IPv4 - RFC 2734.  */
+#define ARPHRD_EUI64		27		/* EUI-64.  */
+#define ARPHRD_INFINIBAND	32		/* InfiniBand.  */
+
+
+
+/* ARP protocol opcodes. */
+#define	ARPOP_REQUEST	1		/* ARP request.  */
+#define	ARPOP_REPLY	2		/* ARP reply.  */
+#define	ARPOP_RREQUEST	3		/* RARP request.  */
+#define	ARPOP_RREPLY	4		/* RARP reply.  */
+#define	ARPOP_InREQUEST	8		/* InARP request.  */
+#define	ARPOP_InREPLY	9		/* InARP reply.  */
+#define	ARPOP_NAK	10		/* (ATM)ARP NAK.  */
+
+
+
 #define ICMP_ECHOREPLY		0	/* Echo Reply			*/
 #define ICMP_DEST_UNREACH	3	/* Destination Unreachable	*/
 #define ICMP_SOURCE_QUENCH	4	/* Source Quench		*/
@@ -99,6 +143,7 @@ do {    \
 #define ICMP_ADDRESS		17	/* Address Mask Request		*/
 #define ICMP_ADDRESSREPLY	18	/* Address Mask Reply		*/
 #define NR_ICMP_TYPES		18
+
 
 
 

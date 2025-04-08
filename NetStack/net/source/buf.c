@@ -2,12 +2,18 @@
 #include "mempool.h"
 #include <memory.h>
 
-struct buf_struct *buf_get()
+struct buf_struct *buf_get(uint16_t size)
 {
     struct buf_struct *sk = mempool_alloc(pool_buf_handle);
-    memset(sk, 0, sizeof(struct buf_struct));
-    sk->len = sizeof(struct buf_struct) - STRUCT_SIZE_PRE(struct buf_struct, data_buf);
-    sk->data = sk->data_buf;
+    *sk = (struct buf_struct) {
+        .next = NULL,
+        .tol_len = STRUCT_SIZE_PRE(struct buf_struct, data_buf) + size,
+        .data_len = size,
+        .data = sk->data_buf,
+        .type = BUF_DATA,
+        .flags = 0
+    };
+
     return sk;
 }
 
@@ -31,7 +37,7 @@ void buf_copy_to(void *data_pointer, struct buf_struct *sk, uint16_t len)
     if (len > MLEN) {
         SYS_ERROR("len over MLEN");
     }
-    memcpy(data_pointer, (void *)sk, len);
+    memcpy(data_pointer, (void *)sk->data_buf, len);
 
 }
 

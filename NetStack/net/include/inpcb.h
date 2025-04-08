@@ -14,7 +14,7 @@ struct inpcb {
 	struct	ip_addr inp_laddr;	
 	unsigned short	inp_lport;
 	void	*inp_ppcb;		
-	int	inp_flags;		
+	int		inp_flags;		
 	struct	ip_struct inp_ip;		
 	struct	buf_struct *inp_options;
 };

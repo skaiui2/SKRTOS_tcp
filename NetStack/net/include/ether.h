@@ -10,8 +10,8 @@ struct eth_hdr {
     unsigned short  ether_type;
 }__attribute__((packed));
 
-void ether_input(struct buf_struct *sk);
-void ether_output(struct buf_struct *sk, uint16_t len);
+void ether_input();
+void ether_output(struct buf_struct *sk);
 
 
 

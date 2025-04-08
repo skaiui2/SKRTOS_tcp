@@ -1,9 +1,10 @@
 #include "ip.h"
 
 
-int ip_output(struct buf_struct *sk, struct buf_struct *opts)
+int ip_output(struct buf_struct *sk)
 {
-    return false;
+    ether_output(sk);
+    return true;
 }
 
 
