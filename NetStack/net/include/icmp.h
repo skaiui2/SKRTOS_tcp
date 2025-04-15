@@ -10,7 +10,7 @@ struct icmp {
 
     union {
         unsigned char   ih_pptr;
-        struct ip_addr  addr;   
+        struct in_addr_r  addr;   
         struct ih_idseq {
             unsigned short  icmp_id;
             unsigned short  icmp_seq;
@@ -28,7 +28,7 @@ struct icmp {
 
 
 
-void icmp_input(struct buf_struct *sk, struct buf_struct *send_sk);
+void icmp_input(struct buf_struct *sk, int hlen);
 void icmp_error();
 void icmp_reflect();
 void icmp_send();

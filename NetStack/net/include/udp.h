@@ -2,19 +2,9 @@
 #define UDP_H
 #include "macro.h"
 #include "ifnet.h"
+#include "ipvar.h"
 #include "buf.h"
 #include "inpcb.h"
-
-
-struct ipovly {
-	void	*ih_next;
-    void    *ih_prev;	
-	unsigned char	ih_x1;			
-	unsigned char	ih_pr;		
-	short	ih_len;		
-	struct	in_addr ih_src;		
-	struct	in_addr ih_dst;		
-};
 
 
 

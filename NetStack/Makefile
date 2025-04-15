@@ -430,6 +430,54 @@ net/source/mempool.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/mempool.c.s
 .PHONY : net/source/mempool.c.s
 
+net/source/route.o: net/source/route.c.o
+.PHONY : net/source/route.o
+
+# target to build an object file
+net/source/route.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/route.c.o
+.PHONY : net/source/route.c.o
+
+net/source/route.i: net/source/route.c.i
+.PHONY : net/source/route.i
+
+# target to preprocess a source file
+net/source/route.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/route.c.i
+.PHONY : net/source/route.c.i
+
+net/source/route.s: net/source/route.c.s
+.PHONY : net/source/route.s
+
+# target to generate assembly for a file
+net/source/route.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/route.c.s
+.PHONY : net/source/route.c.s
+
+net/source/socket.o: net/source/socket.c.o
+.PHONY : net/source/socket.o
+
+# target to build an object file
+net/source/socket.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/socket.c.o
+.PHONY : net/source/socket.c.o
+
+net/source/socket.i: net/source/socket.c.i
+.PHONY : net/source/socket.i
+
+# target to preprocess a source file
+net/source/socket.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/socket.c.i
+.PHONY : net/source/socket.c.i
+
+net/source/socket.s: net/source/socket.c.s
+.PHONY : net/source/socket.s
+
+# target to generate assembly for a file
+net/source/socket.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/socket.c.s
+.PHONY : net/source/socket.c.s
+
 net/source/tapif.o: net/source/tapif.c.o
 .PHONY : net/source/tapif.o
 
@@ -572,6 +620,12 @@ help:
 	@echo "... net/source/mempool.o"
 	@echo "... net/source/mempool.i"
 	@echo "... net/source/mempool.s"
+	@echo "... net/source/route.o"
+	@echo "... net/source/route.i"
+	@echo "... net/source/route.s"
+	@echo "... net/source/socket.o"
+	@echo "... net/source/socket.i"
+	@echo "... net/source/socket.s"
 	@echo "... net/source/tapif.o"
 	@echo "... net/source/tapif.i"
 	@echo "... net/source/tapif.s"

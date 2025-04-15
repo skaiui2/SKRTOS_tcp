@@ -5,7 +5,7 @@
 #include "ether.h"
 #include "ifnet.h"
 #include "debug.h"
-
+#include "ip.h"
 
 
 int main() {
@@ -18,6 +18,8 @@ int main() {
 
 
     fd = tapif_init();
+    arp_init();
+    ip_init();
 
     ifnet_init("192.168.1.200", "9e:4d:9e:e3:48:9f", 150);
 

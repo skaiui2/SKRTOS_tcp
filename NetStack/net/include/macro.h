@@ -11,7 +11,7 @@
 #include <memory.h>
 #include <unistd.h> 
  
-
+#include "config.h"
 
 #define class(class)    \
 typedef struct class##_class class##_class;\
@@ -144,7 +144,16 @@ do {    \
 #define ICMP_ADDRESSREPLY	18	/* Address Mask Reply		*/
 #define NR_ICMP_TYPES		18
 
-
+/*
+#define AF_UNSPEC      0   // Unspecified protocol family, used for generic sockets or unspecified addresses
+#define AF_INET        2   // IPv4 protocol family, used for IPv4 network communication
+#define AF_INET6       10  // IPv6 protocol family, used for IPv6 network communication
+#define AF_UNIX        1   // UNIX local socket, used for inter-process communication on the same machine
+#define AF_LOCAL       1   // Alias for AF_UNIX, represents local sockets
+#define AF_PACKET      17  // Direct access to the link-layer packets, used for low-level networking
+#define AF_NETLINK     16  // Communication between kernel and user-space processes
+#define AF_BLUETOOTH   31  // Bluetooth protocol family, used for Bluetooth device communication
+*/
 
 
 

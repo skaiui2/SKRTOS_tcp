@@ -1,9 +1,14 @@
 #ifndef ARP_H
 #define APR_H
 
-#include "macro.h"
-#include "list.h"
+
+#include "buf.h"
 #include "ether.h"
+#include "socket.h"
+
+extern struct list_node ArpInQue;
+
+
 
 struct arp_hdr {
     unsigned short ar_hrd;
@@ -16,25 +21,36 @@ struct arp_hdr {
 struct arp_ether {
     struct arp_hdr ea_hdr;
     unsigned char arp_sha[6];
-    uint32_t arp_spa;
+    unsigned int arp_spa;
     unsigned char arp_tha[6];
-    uint32_t arp_tpa;
+    unsigned int arp_tpa;
 }__attribute__((packed));
+
+
+
 
 struct arp_cache {
     struct list_node node;
+    //using
+    unsigned int  ipaddr;
+    unsigned char hwaddr[6];
+
+    // Now no-use
+    struct rtentry  *rt_ac; 
     struct buf_struct *last_buf;
     long count_asked;
 };
 
 
 
-void arp_request();
+void arp_init();
 
-void arp_input(struct buf_struct *sk, struct buf_struct *send_sk);
+int arp_resolve(struct arpcom *ac, struct rtentry *rt, struct buf_struct *sk, struct sock_addr *dst, unsigned char *desten);
+void arp_request(struct arpcom *ac, unsigned int *sip, unsigned int *tip, unsigned char *addr);
+
+void arp_input();
 void arp_timer();
 void arp_free();
-void arp_resolve();
 
 
 #endif

@@ -5,36 +5,42 @@
 #include "debug.h"
 
 
-void icmp_send(struct buf_struct *sk, struct buf_struct *send_sk)
+void icmp_send(struct buf_struct *sk, struct buf_struct *opts)
 {
-    uint16_t len = send_sk->data_len - sizeof(struct eth_hdr) - sizeof(struct ip_struct) - sizeof(struct icmp);
-    memcpy(send_sk->data, sk->data, len);
+    struct ip_struct *ip;
     printf("send\r\n");
-    print_content(send_sk->data_buf, 100);
-    ip_output(send_sk);
+
+    sk->data -= sizeof(struct ip_struct);
+    sk->data_len += sizeof(struct ip_struct);
+
+    ip = (struct ip_struct *)sk->data;
+
+    ip->ip_dst = ip->ip_src;
+    ip->ip_src = OwnerNet.ipaddr;
+    ip->ip_sum = 0;
+    ip->ip_sum = checksum((void *)ip, ip->ip_hl << 2);
+
+    ip_output(sk, opts, NULL, 0, NULL);
 }
 
 
-void icmp_reflect(struct buf_struct *sk, struct buf_struct *send_sk)
+void icmp_reflect(struct buf_struct *sk)
 {
-    struct icmp *icp = (struct icmp *)sk->data;
-    struct icmp *send_icp = (struct icmp *)send_sk->data;
-    *send_icp = *icp;
+    struct buf_struct *opts;
+    unsigned short len;
+    len = sk->data_len + sizeof(struct ip_struct) + sizeof(struct eth_hdr);
+    struct icmp *send_icp = (struct icmp *)sk->data;
     send_icp->icmp_type = ICMP_ECHOREPLY;
     send_icp->icmp_cksum = 0;
-    send_icp->icmp_cksum = checksum((void *)send_icp, sk->data_len);
+    send_icp->icmp_cksum = checksum((void *)send_icp, len);
 
-    sk->data += sizeof(struct icmp);
-    send_sk->data += sizeof(struct icmp);
-
-
-    icmp_send(sk, send_sk);
-
+    icmp_send(sk, opts);
 }
 
-void icmp_input(struct buf_struct *sk, struct buf_struct *send_sk)
+void icmp_input(struct buf_struct *sk, int hlen)
 {
-    struct icmp *icp = (struct icmp *)sk->data;
+    struct icmp *icp;
+    icp = (struct icmp *)sk->data;
     print_content((char *)icp, sizeof(struct icmp));
 
     switch (icp->icmp_type)
@@ -42,7 +48,7 @@ void icmp_input(struct buf_struct *sk, struct buf_struct *send_sk)
     case ICMP_ECHO:
         printf("icmp echo!\r\n");
         
-        icmp_reflect(sk, send_sk);
+        icmp_reflect(sk);
         
         break;
     

@@ -6,14 +6,13 @@ struct buf_struct *buf_get(uint16_t size)
 {
     struct buf_struct *sk = mempool_alloc(pool_buf_handle);
     *sk = (struct buf_struct) {
-        .next = NULL,
         .tol_len = STRUCT_SIZE_PRE(struct buf_struct, data_buf) + size,
-        .data_len = size,
+        .data_len = 0,
         .data = sk->data_buf,
         .type = BUF_DATA,
         .flags = 0
     };
-
+    list_node_init(&(sk->node));
     return sk;
 }
 
@@ -39,12 +38,4 @@ void buf_copy_to(void *data_pointer, struct buf_struct *sk, uint16_t len)
     }
     memcpy(data_pointer, (void *)sk->data_buf, len);
 
-}
-
-
-uint8_t *buf_data_ptr_add(struct buf_struct *sk, uint16_t len)
-{
-    uint8_t *data_ptr = sk->data;
-    data_ptr += len;
-    return data_ptr;
 }

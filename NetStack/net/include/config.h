@@ -6,5 +6,12 @@
 #define config_heap   (60*1024)
 #define MLEN 256
 
+#define  TCPT_NTIMERS 4
+
+
+#define IP_MAX_MEMBERSHIPS              20
+
+
+
 
 #endif

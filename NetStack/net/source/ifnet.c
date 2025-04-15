@@ -1,6 +1,12 @@
 #include "ifnet.h"
+#include "route.h"
+#include "macro.h"
+#include "ether.h"
+#include "in.h"
 
 struct ifnet OwnerNet;
+struct rtentry RouteEntry;
+
 
 void parse_mac_address(const char *mac, unsigned char hwaddr[6]) {
     char mac_copy[18]; 
@@ -15,10 +21,10 @@ void parse_mac_address(const char *mac, unsigned char hwaddr[6]) {
 }
 
 
-
-void ifnet_init(char *ip, char *mac, uint16_t mtu)
+/*Now only one mac addr*/
+void ifnet_init(char *ip, char *mac, unsigned short mtu)
 {
-    struct ip_addr addr;
+    struct in_addr_r addr;
     inet_pton(AF_INET, ip, &addr);
 
     struct ifnet *net = &OwnerNet;
@@ -26,7 +32,10 @@ void ifnet_init(char *ip, char *mac, uint16_t mtu)
         .ipaddr = addr,
         .mtu = mtu,
     };
+
     parse_mac_address(mac, net->hwaddr); 
+
+    RouteEntry.rt_ifp = &OwnerNet;
 
     printf("MAC Address: %02x:%02x:%02x:%02x:%02x:%02x\n",
            net->hwaddr[0], net->hwaddr[1], net->hwaddr[2],
@@ -34,12 +43,15 @@ void ifnet_init(char *ip, char *mac, uint16_t mtu)
 
     printf("IP Address: ");
     uint32_t ar = net->ipaddr.addr;
+    
     printf("%u.%u.%u.%u",
            ar & 0xFF,
            (ar >> 8) & 0xFF,
            (ar >> 16) & 0xFF,
            (ar >> 24) & 0xFF);
     printf("\n");
+
+
 
 }
 

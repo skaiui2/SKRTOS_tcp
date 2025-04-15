@@ -1,15 +1,13 @@
 #ifndef IP_H
 #define IP_H
 #include "buf.h"
-#include "ether.h"
+#include "route.h"
+#include "ipvar.h"
+
 
 #define IPVERSION	4
 
-
-struct ip_addr {
-    unsigned int   addr;
-}__attribute__((packed));
-
+extern struct list_node IpInQue;
 
 struct ip_struct {
     /*LITTLE_ENDIAN!!!*/
@@ -22,8 +20,8 @@ struct ip_struct {
     unsigned char   ip_ttl;
     unsigned char   ip_p;
     unsigned short  ip_sum;
-    struct ip_addr  ip_src;
-    struct ip_addr  ip_dst; 
+    struct in_addr_r  ip_src;
+    struct in_addr_r  ip_dst; 
 
 }__attribute__((packed));
 
@@ -32,9 +30,11 @@ struct ip_struct {
 unsigned short checksum(void *b, int len);
 
 
-void ip_input(struct buf_struct *sk, struct buf_struct *send_sk);
+void ip_init();
+void ip_input();
 
-int  ip_output(struct buf_struct *sk);
+
+int ip_output(struct buf_struct *sk, struct buf_struct *opt, struct route *ro, int flags, struct ip_moptions *imo);
 
 void ip_forward(struct buf_struct *sk, int  opts);
 

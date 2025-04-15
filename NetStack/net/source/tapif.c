@@ -9,6 +9,7 @@
 #include <sys/select.h>
 #include "tapif.h"
 #include "debug.h"
+#include "ether.h"
 
 int fd;
 
@@ -47,9 +48,9 @@ struct buf_struct *tapif_input()
         return NULL;
     } 
 
-    sk = buf_get(sizeof(struct buf_struct));
+    sk = buf_get(readlen);
     sk->data_len = readlen;
-    printf("read:%d\r\n", sk->data_len);
+    printf("read:%d\r\n", readlen);
     if (sk == NULL) {
         SYS_ERROR("can't allocate buf");
         return NULL;
