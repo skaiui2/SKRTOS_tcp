@@ -1,6 +1,8 @@
 #include "ip.h"
 #include "icmp.h"
 #include "list.h"
+#include "tcp.h"
+#include "udp.h"
 
 
 struct list_node IpInQue;
@@ -29,6 +31,8 @@ void ip_input()
     struct list_node *first_node;
     struct buf_struct *sk;
     struct ip_struct *ip;
+    unsigned short csum;
+    int hlen;
 
     first_node = IpInQue.next;
     while(first_node != &IpInQue) {
@@ -38,26 +42,38 @@ void ip_input()
         first_node = first_node->next;
 
         ip = (struct ip_struct *)sk->data;
-
+        printf("ip len:%d\r\n", ip->ip_len);
         if (ip->ip_v != IPVERSION) {
             SYS_ERROR("It is not IPv4\r\n");
             return;
         }
 
-        unsigned short csum = -1;
-        csum = checksum((void *)ip, (ip->ip_hl) << 2); 
+        csum = -1;
+        csum = in_checksum((void *)ip, (ip->ip_hl) << 2); 
         if (csum != 0) {
-            SYS_ERROR("check sum error!\r\n");
+            SYS_ERROR("ip input check sum error!\r\n");
         }
 
         sk->data  += sizeof(struct ip_struct);
         sk->data_len -= sizeof(struct ip_struct);
 
+        hlen = ip->ip_hl << 2; 
+
         switch (ip->ip_p) 
         {
         case IPPROTO_ICMP:
             printf("ICMP!\r\n");
-            icmp_input(sk, ip->ip_hl); 
+            icmp_input(sk, hlen); 
+            break;
+
+        case IPPROTO_UDP:
+            printf("udp input\r\n");
+            udp_input(sk, hlen);
+            break;
+
+        case IPPROTO_TCP:
+            printf("tcp input!\r\n");
+            tcp_input(sk, hlen);
             break;
     
         default:

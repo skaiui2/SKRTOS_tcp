@@ -7,6 +7,10 @@
 #include "socket.h"
 #include "route.h"
 
+
+extern struct list_node EthOutQue;
+
+
 struct eth_hdr {
     unsigned char   ether_dhost[6];
     unsigned char   ether_shost[6];
@@ -33,6 +37,7 @@ struct ether_multi {
 
 
 
+void eth_init();
 void ether_input();
 
 void ether_output(struct ifnet *ifp, struct buf_struct *sk, struct sock_addr *dst, struct rtentry *rt);

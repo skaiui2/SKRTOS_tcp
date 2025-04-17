@@ -10,6 +10,7 @@
 #include "ether.h"
 #include "route.h"
 #include "memalloc.h"
+#include "ip.h"
 
 struct arp_cache AcHead;
 struct list_node ArpInQue;
@@ -71,6 +72,7 @@ int arp_resolve(struct arpcom *ac, struct rtentry *rt, struct buf_struct *sk, st
     }
 
     if (ac_node == &(AcHead.node)) {
+        sk->flags = BLOCK;
         arp_request(ac, &(OwnerNet.ipaddr.addr), &ipaddr, desten);        
     }
     return 0;
@@ -86,6 +88,7 @@ void arp_request(struct arpcom *ac, unsigned int *sip, unsigned int *tip, unsign
 
     sk = buf_get(sizeof(struct buf_struct));
     sk->data += sizeof(struct eth_hdr);
+    sk->data_len += sizeof(struct arp_ether);
 
     ae = (struct arp_ether *)sk->data;
     ah = &(ae->ea_hdr);
@@ -94,24 +97,24 @@ void arp_request(struct arpcom *ac, unsigned int *sip, unsigned int *tip, unsign
     ah->ar_pro = htons(ETHERTYPE_IP);
     ah->ar_hln = sizeof(ae->arp_sha);
     ah->ar_pln = sizeof(ae->arp_spa);
-    ah->ar_op  = htons(ARPOP_RREQUEST);
+    ah->ar_op  = htons(ARPOP_REQUEST);
 
     memcpy(ae->arp_sha, OwnerNet.hwaddr, 6);
     memcpy(&(ae->arp_spa), sip, 4);
 
-    memcpy(ae->arp_tha, broadcast_mac, 6);
+    memset(ae->arp_tha, 0, 6);
     memcpy(&(ae->arp_tpa), tip, 4);
 
     eh = (struct eth_hdr *)sa.sa_data;
     eh->ether_type = htons(ETHERTYPE_ARP);
-	memcpy(eh->ether_dhost, ae->arp_tha, 6);
+	memcpy(eh->ether_dhost, broadcast_mac, 6);
 
     sa.sa_family = AF_UNSPEC;
     sa.sa_len = sizeof(sa);
-
-    sk->data_len += sizeof(struct arp_ether);
     
     ether_output(&OwnerNet, sk, &sa, (struct rtentry *)0);
+
+    buf_free(sk);
 }
 
 
@@ -149,6 +152,8 @@ void arp_input()
     struct arp_ether *ap;
     struct arp_hdr *ah;
     struct list_node *ai_node;
+    struct ip_struct *ip;
+    struct eth_hdr *eh;
     register struct list_node *ac_node;
     register struct arp_cache *ac;
 
@@ -173,6 +178,16 @@ void arp_input()
             ac = heap_malloc(sizeof(struct arp_cache));
             ac->ipaddr = ap->arp_spa;
             arp_cache_add_tail(ac);
+        }
+
+        for(ac_node = EthOutQue.next; ac_node != &EthOutQue; ac_node = ac_node->next) {
+            sk = container_of(ac_node, struct buf_struct, node);
+            ip = (struct ip_struct *)sk->data;
+            eh = (struct eth_hdr *)(sk->data - sizeof(struct eth_hdr));
+            if (ip->ip_dst.addr == ap->arp_spa) {
+                memcpy(eh->ether_dhost, ap->arp_sha, 6);
+                sk->flags = READY;
+            }
         }
         memcpy(ac->hwaddr, ap->arp_sha, 6);
         printf("arp_input mac record\r\n");

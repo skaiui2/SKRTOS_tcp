@@ -17,6 +17,9 @@ struct sock_addr_in {
 };
 
 
+unsigned short in_checksum(void *b, int len);
+
+
 
 
 #endif

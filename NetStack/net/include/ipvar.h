@@ -7,14 +7,14 @@
 
 
 struct ipovly {
-	void 	*ih_next;
-    void    *ih_prev;	
+	unsigned int 	ih_next;
+    unsigned int   	ih_prev;	
 	unsigned char	ih_x1;		
 	unsigned char	ih_pr;		
 	short	ih_len;			
 	struct	in_addr_r ih_src;		
 	struct	in_addr_r ih_dst;	
-};
+}__attribute__((packed));
 
 
 struct ip_moptions {

@@ -6,6 +6,27 @@
 #include "ip.h"
 #include "ifnet.h"
 
+
+struct list_node EthOutQue;
+
+
+void eth_init()
+{
+    list_node_init(&EthOutQue);
+}
+
+
+
+void EthOutQue_add_tail(struct buf_struct *sk)
+{
+    list_add(&EthOutQue, &sk->node);
+}
+
+void EthOutQue_remove_tail(struct buf_struct *sk)
+{
+    list_remove(&sk->node);
+}
+
 void ether_input()
 {
     struct buf_struct *sk = tapif_input();
@@ -50,36 +71,46 @@ void ether_output(struct ifnet *ifp, struct buf_struct *sk, struct sock_addr *ds
 {
     struct eth_hdr *eh;
     struct eth_hdr *pkt;
+    struct list_node *sk_node;
 
-    sk->data -= sizeof(struct eth_hdr);
-    sk->data_len += sizeof(struct eth_hdr);
-    eh = (struct eth_hdr *)sk->data;
-    switch (dst->sa_family)
-    {
-    case AF_INET:
-        if (arp_resolve(0, rt, 0, dst, 0)) {
-            pkt = (struct eth_hdr *)dst;
+    EthOutQue_add_tail(sk);
+    for(sk_node = EthOutQue.next; sk_node != &EthOutQue; sk_node = sk_node->next) {
+        if (sk->flags == BLOCK) {
+            continue;
+        }
+        sk = container_of(sk_node, struct buf_struct, node);
+
+        sk->data -= sizeof(struct eth_hdr);
+        sk->data_len += sizeof(struct eth_hdr);
+        eh = (struct eth_hdr *)sk->data;
+        switch (dst->sa_family)
+        {
+        case AF_INET:
+            if (arp_resolve(0, rt, sk, dst, 0)) {
+                pkt = (struct eth_hdr *)dst;
+                memcpy(eh->ether_dhost, pkt->ether_dhost, 6);
+                printf("ether_output mac get\r\n");
+                print_mac(eh->ether_dhost);
+            }	
+		    eh->ether_type = htons(ETHERTYPE_IP);
+            break;
+        case AF_UNSPEC:
+            pkt = (struct eth_hdr *)dst->sa_data;
             memcpy(eh->ether_dhost, pkt->ether_dhost, 6);
-            printf("ether_output mac get\r\n");
-            print_mac(eh->ether_dhost);
-        }	
-		eh->ether_type = htons(ETHERTYPE_IP);
-        break;
-    case AF_UNSPEC:
-        pkt = (struct eth_hdr *)dst->sa_data;
-        memcpy(eh->ether_dhost, pkt->ether_dhost, 6);
-        eh->ether_type = pkt->ether_type;  
-        break;
+            eh->ether_type = pkt->ether_type;  
+            break;
     
-    default:
-        break;
-    } 
+        default:
+            break;
+        } 
 
-    memcpy(eh->ether_shost, ifp->hwaddr, 6);
+        memcpy(eh->ether_shost, ifp->hwaddr, 6);
 
-    printf("ether output len: %d\r\n",sk->data_len);
-    print_content((char *)sk->data_buf, sk->data_len);
-    tapif_output(sk, sk->data_len);
+        printf("ether output len: %d\r\n",sk->data_len);
+        print_content((char *)sk->data_buf, sk->data_len);
+        tapif_output(sk, sk->data_len);
+        EthOutQue_remove_tail(sk);
+    }
 }
 
 

@@ -27,9 +27,6 @@ struct ip_struct {
 
 
 
-unsigned short checksum(void *b, int len);
-
-
 void ip_init();
 void ip_input();
 

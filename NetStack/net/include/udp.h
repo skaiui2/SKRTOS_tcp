@@ -8,22 +8,15 @@
 
 
 
-struct udp_hdr {
+struct udphdr {
 	unsigned short	uh_sport;	
 	unsigned short	uh_dport;		
-	short	uh_ulen;		
+	unsigned short	uh_ulen;		
 	unsigned short	uh_sum;			
-};
+}__attribute__((packed));
 
 
-struct	udpiphdr {
-	struct 	ipovly ui_i;		
-	struct	udp_hdr ui_u;		
-};
-
-
-
-void udp_input(struct buf_struct *sk, int iplen);
+void udp_input(struct buf_struct *sk, int iphlen);
 int udp_output(struct inpcb *inp, struct buf_struct *sk, struct buf_struct  *net, struct buf_struct *control);
 
 

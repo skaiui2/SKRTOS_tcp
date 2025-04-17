@@ -39,7 +39,8 @@ struct class
 typedef char err_rt;
 typedef int  err_code;
 
-
+#define BLOCK 1
+#define READY 0
 
 
 #define true    1

@@ -10,7 +10,9 @@
 struct tcpiphdr {
     struct ipovly   ti_i;
     struct tcphdr   ti_t;
-};
+}__attribute__((packed));
+
+
 
 
 

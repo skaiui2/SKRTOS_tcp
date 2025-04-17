@@ -18,7 +18,7 @@ void icmp_send(struct buf_struct *sk, struct buf_struct *opts)
     ip->ip_dst = ip->ip_src;
     ip->ip_src = OwnerNet.ipaddr;
     ip->ip_sum = 0;
-    ip->ip_sum = checksum((void *)ip, ip->ip_hl << 2);
+    ip->ip_sum = in_checksum((void *)ip, ip->ip_hl << 2);
 
     ip_output(sk, opts, NULL, 0, NULL);
 }
@@ -32,7 +32,7 @@ void icmp_reflect(struct buf_struct *sk)
     struct icmp *send_icp = (struct icmp *)sk->data;
     send_icp->icmp_type = ICMP_ECHOREPLY;
     send_icp->icmp_cksum = 0;
-    send_icp->icmp_cksum = checksum((void *)send_icp, len);
+    send_icp->icmp_cksum = in_checksum((void *)send_icp, len);
 
     icmp_send(sk, opts);
 }

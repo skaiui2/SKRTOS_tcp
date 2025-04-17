@@ -286,29 +286,29 @@ net/source/ifnet.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/ifnet.c.s
 .PHONY : net/source/ifnet.c.s
 
-net/source/ip_cksum.o: net/source/ip_cksum.c.o
-.PHONY : net/source/ip_cksum.o
+net/source/in_cksum.o: net/source/in_cksum.c.o
+.PHONY : net/source/in_cksum.o
 
 # target to build an object file
-net/source/ip_cksum.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/ip_cksum.c.o
-.PHONY : net/source/ip_cksum.c.o
+net/source/in_cksum.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/in_cksum.c.o
+.PHONY : net/source/in_cksum.c.o
 
-net/source/ip_cksum.i: net/source/ip_cksum.c.i
-.PHONY : net/source/ip_cksum.i
+net/source/in_cksum.i: net/source/in_cksum.c.i
+.PHONY : net/source/in_cksum.i
 
 # target to preprocess a source file
-net/source/ip_cksum.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/ip_cksum.c.i
-.PHONY : net/source/ip_cksum.c.i
+net/source/in_cksum.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/in_cksum.c.i
+.PHONY : net/source/in_cksum.c.i
 
-net/source/ip_cksum.s: net/source/ip_cksum.c.s
-.PHONY : net/source/ip_cksum.s
+net/source/in_cksum.s: net/source/in_cksum.c.s
+.PHONY : net/source/in_cksum.s
 
 # target to generate assembly for a file
-net/source/ip_cksum.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/ip_cksum.c.s
-.PHONY : net/source/ip_cksum.c.s
+net/source/in_cksum.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/in_cksum.c.s
+.PHONY : net/source/in_cksum.c.s
 
 net/source/ip_input.o: net/source/ip_input.c.o
 .PHONY : net/source/ip_input.o
@@ -429,6 +429,30 @@ net/source/mempool.s: net/source/mempool.c.s
 net/source/mempool.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/mempool.c.s
 .PHONY : net/source/mempool.c.s
+
+net/source/queue.o: net/source/queue.c.o
+.PHONY : net/source/queue.o
+
+# target to build an object file
+net/source/queue.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/queue.c.o
+.PHONY : net/source/queue.c.o
+
+net/source/queue.i: net/source/queue.c.i
+.PHONY : net/source/queue.i
+
+# target to preprocess a source file
+net/source/queue.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/queue.c.i
+.PHONY : net/source/queue.c.i
+
+net/source/queue.s: net/source/queue.c.s
+.PHONY : net/source/queue.s
+
+# target to generate assembly for a file
+net/source/queue.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/queue.c.s
+.PHONY : net/source/queue.c.s
 
 net/source/route.o: net/source/route.c.o
 .PHONY : net/source/route.o
@@ -602,9 +626,9 @@ help:
 	@echo "... net/source/ifnet.o"
 	@echo "... net/source/ifnet.i"
 	@echo "... net/source/ifnet.s"
-	@echo "... net/source/ip_cksum.o"
-	@echo "... net/source/ip_cksum.i"
-	@echo "... net/source/ip_cksum.s"
+	@echo "... net/source/in_cksum.o"
+	@echo "... net/source/in_cksum.i"
+	@echo "... net/source/in_cksum.s"
 	@echo "... net/source/ip_input.o"
 	@echo "... net/source/ip_input.i"
 	@echo "... net/source/ip_input.s"
@@ -620,6 +644,9 @@ help:
 	@echo "... net/source/mempool.o"
 	@echo "... net/source/mempool.i"
 	@echo "... net/source/mempool.s"
+	@echo "... net/source/queue.o"
+	@echo "... net/source/queue.i"
+	@echo "... net/source/queue.s"
 	@echo "... net/source/route.o"
 	@echo "... net/source/route.i"
 	@echo "... net/source/route.s"
