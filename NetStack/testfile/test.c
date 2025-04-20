@@ -23,10 +23,8 @@ void net_init()
 
 int main() {
     
-    int fd;
     int ret = 0;
     fd_set readfds; 
-
 
     fd = tapif_init();
     net_init();

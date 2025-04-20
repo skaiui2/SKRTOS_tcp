@@ -113,3 +113,22 @@ Ether / IP / ICMP 192.168.1.100 > 192.168.1.200 echo-request 0 / Raw
 
 ```
 
+#### **Testing UDP **
+
+You can also test UDP:
+
+```
+skaiuijing@ubuntu:~/Documents$ sudo nmap -sU -p 1234 192.168.1.200
+
+Starting Nmap 7.60 ( https://nmap.org ) at 2025-04-19 20:53 PDT
+Nmap scan report for 192.168.1.200
+Host is up (0.00014s latency).
+
+PORT     STATE SERVICE
+1234/udp open  search-agent
+MAC Address: 9E:4D:9E:E3:48:9F (Unknown)
+
+Nmap done: 1 IP address (1 host up) scanned in 0.55 seconds
+
+```
+

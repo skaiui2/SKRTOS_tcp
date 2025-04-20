@@ -49,3 +49,14 @@ void print_content(char *buf, uint16_t len)
 void print_mac(unsigned char mac[]) {
     printf("%02X:%02X:%02X:%02X:%02X:%02X\r\n", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 }
+
+void print_ip(unsigned int ip) {
+    static int counter = 0;  // Persistent counter that increments on each call
+    counter++;
+    
+    struct in_addr ip_addr;
+    ip_addr.s_addr = htonl(ip);  // Convert to network byte order
+    printf("Call #%d - IP Address: %s\n", counter, inet_ntoa(ip_addr));
+}
+
+

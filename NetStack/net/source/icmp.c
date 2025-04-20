@@ -3,24 +3,28 @@
 #include "ip.h"
 #include "ether.h"
 #include "debug.h"
+#include "route.h"
 
 
 void icmp_send(struct buf_struct *sk, struct buf_struct *opts)
 {
     struct ip_struct *ip;
+    struct sock_addr_in *sa;
+    struct route    rt;
     printf("send\r\n");
 
     sk->data -= sizeof(struct ip_struct);
     sk->data_len += sizeof(struct ip_struct);
 
     ip = (struct ip_struct *)sk->data;
+    sk->type = ip->ip_p;
 
-    ip->ip_dst = ip->ip_src;
-    ip->ip_src = OwnerNet.ipaddr;
-    ip->ip_sum = 0;
-    ip->ip_sum = in_checksum((void *)ip, ip->ip_hl << 2);
+    sa = (struct sock_addr_in *)&rt.ro_dst;
+    sa->sin_family = AF_INET;
+    sa->sin_addr = ip->ip_src;
+    sa->sin_len = sizeof(*sa);
 
-    ip_output(sk, opts, NULL, 0, NULL);
+    ip_output(sk, &rt);
 }
 
 

@@ -52,6 +52,6 @@ int tcp_output(struct tcpcb *tp)
 
 
 
-
+    ip_output(0, 0);
 
 }
