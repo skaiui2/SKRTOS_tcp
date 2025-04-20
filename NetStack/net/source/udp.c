@@ -83,7 +83,7 @@ int udp_output(struct inpcb *inp, struct buf_struct *sk, struct buf_struct  *add
 	ui->ui_u.uh_dport = inp->inp_fport;
 	*/
 	print_ip(ui->ui_i.ih_src.addr);
-	ui->ui_i.ih_dst = ui->ui_i.ih_src;
+	ui->ui_i.ih_dst.addr = htonl(ui->ui_i.ih_src.addr);
 	ui->ui_i.ih_src = OwnerNet.ipaddr;
 	ui->ui_u.uh_dport = ui->ui_u.uh_sport;
 	ui->ui_u.uh_sport = htons(1234);
@@ -98,7 +98,7 @@ int udp_output(struct inpcb *inp, struct buf_struct *sk, struct buf_struct  *add
     
 	sa = (struct sock_addr_in *)&rt.ro_dst;
     sa->sin_family = AF_INET;
-    sa->sin_addr.addr = htonl(ui->ui_i.ih_dst.addr);
+    sa->sin_addr.addr = ui->ui_i.ih_dst.addr;
 	print_ip(sa->sin_addr.addr);
     sa->sin_len = sizeof(*sa);
 

@@ -3,7 +3,7 @@
 #include "route.h"
 #include "ip.h"
 
-unsigned short	ip_id = 0;
+unsigned short	ip_id = 2;
 
 #define	IP_DF 0x4000			/* dont fragment flag */
 #define	IP_MF 0x2000			/* more fragments flag */

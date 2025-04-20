@@ -29,7 +29,6 @@ int main() {
     fd = tapif_init();
     net_init();
 
-
     while(1) {
         ret = select(fd + 1, &readfds, NULL, NULL, NULL);
         if(ret == 1) {

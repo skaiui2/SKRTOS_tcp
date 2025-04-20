@@ -113,7 +113,9 @@ Ether / IP / ICMP 192.168.1.100 > 192.168.1.200 echo-request 0 / Raw
 
 ```
 
-#### **Testing UDP **
+### Testing UDP 
+
+**scan Port**
 
 You can also test UDP:
 
@@ -131,4 +133,27 @@ MAC Address: 9E:4D:9E:E3:48:9F (Unknown)
 Nmap done: 1 IP address (1 host up) scanned in 0.55 seconds
 
 ```
+
+**test Server**
+
+compile  UDP-client code:
+
+```
+$: cd testdoc
+$: gcc udp.c -o udp
+$: ./udp
+```
+
+The UDP-client will send message "Lx" to SKRTOS_tcp.
+
+then output:
+
+```
+Sent: Lx
+Received: Lx
+```
+
+If output this, show the SKRTOS_tcp has received message "Lx", then send it to UDP-client.
+
+
 
