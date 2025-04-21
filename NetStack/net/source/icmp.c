@@ -9,7 +9,7 @@
 void icmp_send(struct buf_struct *sk, struct buf_struct *opts)
 {
     struct ip_struct *ip;
-    struct sock_addr_in *sa;
+    struct _sockaddr_in *sa;
     struct route    rt;
     printf("send\r\n");
 
@@ -19,7 +19,7 @@ void icmp_send(struct buf_struct *sk, struct buf_struct *opts)
     ip = (struct ip_struct *)sk->data;
     sk->type = ip->ip_p;
 
-    sa = (struct sock_addr_in *)&rt.ro_dst;
+    sa = (struct _sockaddr_in *)&rt.ro_dst;
     sa->sin_family = AF_INET;
     sa->sin_addr = ip->ip_src;
     sa->sin_len = sizeof(*sa);

@@ -67,7 +67,7 @@ void ether_input()
     buf_free(sk);
 }
 
-void ether_output(struct ifnet *ifp, struct buf_struct *sk, struct sock_addr *dst, struct rtentry *rt)
+void ether_output(struct ifnet *ifp, struct buf_struct *sk, struct _sockaddr *dst, struct rtentry *rt)
 {
     struct eth_hdr *eh;
     struct eth_hdr *pkt;
@@ -107,7 +107,8 @@ void ether_output(struct ifnet *ifp, struct buf_struct *sk, struct sock_addr *ds
         memcpy(eh->ether_shost, ifp->hwaddr, 6);
 
         printf("ether output len: %d\r\n",sk->data_len);
-        print_content((char *)sk->data_buf, sk->data_len);
+        print_content((char *)sk->data, sk->data_len);
+
         tapif_output(sk, sk->data_len);
         EthOutQue_remove_tail(sk);
     }

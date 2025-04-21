@@ -17,7 +17,7 @@ struct udphdr {
 
 
 void udp_input(struct buf_struct *sk, int iphlen);
-int udp_output(struct inpcb *inp, struct buf_struct *sk, struct buf_struct  *net, struct buf_struct *control);
+int udp_output(struct inpcb *inp, struct buf_struct *sk, struct _sockaddr *sc);
 
 
 

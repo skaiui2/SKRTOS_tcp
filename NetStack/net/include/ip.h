@@ -20,8 +20,8 @@ struct ip_struct {
     unsigned char   ip_ttl;
     unsigned char   ip_p;
     unsigned short  ip_sum;
-    struct in_addr_r  ip_src;
-    struct in_addr_r  ip_dst; 
+    struct _in_addr  ip_src;
+    struct _in_addr  ip_dst; 
 
 }__attribute__((packed));
 

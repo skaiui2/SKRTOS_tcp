@@ -37,7 +37,7 @@ struct rtentry {
 
 struct route {
 	struct	rtentry *ro_rt;
-	struct	sock_addr ro_dst;
+	struct	_sockaddr ro_dst;
 };
 
 

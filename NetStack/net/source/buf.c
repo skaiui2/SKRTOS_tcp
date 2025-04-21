@@ -27,7 +27,7 @@ void buf_copy(struct buf_struct *sk, void *data_pointer, uint16_t len)
     if (len > sizeof(struct buf_struct)) {
         SYS_ERROR("len over MLEN");
     }
-    memcpy(sk->data_buf, (const char *)data_pointer, len);
+    memcpy(sk->data, (const char *)data_pointer, len);
 
 }
 
@@ -36,6 +36,6 @@ void buf_copy_to(void *data_pointer, struct buf_struct *sk, uint16_t len)
     if (len > MLEN) {
         SYS_ERROR("len over MLEN");
     }
-    memcpy(data_pointer, (void *)sk->data_buf, len);
+    memcpy(data_pointer, (void *)sk->data, len);
 
 }

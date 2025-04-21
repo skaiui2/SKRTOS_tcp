@@ -41,6 +41,7 @@ typedef int  err_code;
 
 #define BLOCK 1
 #define READY 0
+#define ERROR (-1)
 
 
 #define true    1

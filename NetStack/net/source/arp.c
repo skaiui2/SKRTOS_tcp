@@ -49,15 +49,15 @@ void arp_InQue_remove_tail(struct buf_struct *sk)
     
 }
 
-int arp_resolve(struct arpcom *ac, struct rtentry *rt, struct buf_struct *sk, struct sock_addr *dst, unsigned char *desten)
+int arp_resolve(struct arpcom *ac, struct rtentry *rt, struct buf_struct *sk, struct _sockaddr *dst, unsigned char *desten)
 {
     struct arp_cache *acc;
     struct list_node *ac_node;
-    struct sock_addr_in *sa;
+    struct _sockaddr_in *sa;
     struct eth_hdr *eh;
     unsigned int    ipaddr;
 
-    sa = (struct sock_addr_in *)dst;
+    sa = (struct _sockaddr_in *)dst;
     ipaddr = sa->sin_addr.addr;
 
     eh = (struct eth_hdr *)dst;
@@ -84,7 +84,7 @@ void arp_request(struct arpcom *ac, unsigned int *sip, unsigned int *tip, unsign
     struct eth_hdr *eh;
     struct arp_ether  *ae;
     struct arp_hdr *ah;
-    struct sock_addr sa;
+    struct _sockaddr sa;
 
     sk = buf_get(sizeof(struct buf_struct));
     sk->data += sizeof(struct eth_hdr);
@@ -120,7 +120,7 @@ void arp_request(struct arpcom *ac, unsigned int *sip, unsigned int *tip, unsign
 
 static void arp_reply(struct buf_struct *sk)
 {
-    struct sock_addr sa;
+    struct _sockaddr sa;
     struct eth_hdr *eh;  
     struct arp_ether *pkt  = (struct arp_ether *)sk->data;
 

@@ -24,7 +24,7 @@ void parse_mac_address(const char *mac, unsigned char hwaddr[6]) {
 /*Now only one mac addr*/
 void ifnet_init(char *ip, char *mac, unsigned short mtu)
 {
-    struct in_addr_r addr;
+    struct _in_addr addr;
     inet_pton(AF_INET, ip, &addr);
 
     struct ifnet *net = &OwnerNet;

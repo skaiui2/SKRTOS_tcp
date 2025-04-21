@@ -12,11 +12,11 @@ unsigned short	ip_id = 2;
 
 int ip_output(struct buf_struct *sk, struct route *rt)
 {
-    struct sock_addr_in *sa;
+    struct _sockaddr_in *sa;
     struct ip_struct *ip;
     int hlen;
 
-    sa = (struct sock_addr_in *)&(rt->ro_dst);
+    sa = (struct _sockaddr_in *)&(rt->ro_dst);
 
     ip = (struct ip_struct *)sk->data;
     hlen = sizeof(struct ip_struct);
@@ -35,7 +35,7 @@ int ip_output(struct buf_struct *sk, struct route *rt)
     ip->ip_sum = 0;
     ip->ip_sum = in_checksum(ip, hlen);
         
-    ether_output(&OwnerNet, sk, (struct sock_addr *)sa, (struct rtentry *)0);
+    ether_output(&OwnerNet, sk, (struct _sockaddr *)sa, (struct rtentry *)0);
     return true;
 }
 

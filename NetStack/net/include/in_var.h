@@ -5,7 +5,7 @@
 
 
 struct in_multi {
-	struct	in_addr_r inm_addr;	/* IP multicast address */
+	struct	_in_addr inm_addr;	/* IP multicast address */
 	struct	ifnet *inm_ifp;		/* back pointer to ifnet */
 	struct	in_ifaddr *inm_ia;	/* back pointer to in_ifaddr */
 	unsigned int	inm_refcount;		/* no. membership claims by sockets */
@@ -22,11 +22,11 @@ struct in_ifaddr {
 	unsigned long	ia_netmask;		/* mask of net part */
 	unsigned long	ia_subnet;		/* subnet number, including net */
 	unsigned long	ia_subnetmask;		/* mask of subnet part */
-	struct	in_addr_r ia_netbroadcast; /* to recognize net broadcasts */
+	struct	_in_addr ia_netbroadcast; /* to recognize net broadcasts */
 	struct	in_ifaddr *ia_next;	/* next in list of internet addresses */
-	struct	sock_addr_in ia_addr;	/* reserve space for interface name */
-	struct	sock_addr_in ia_dstaddr; /* reserve space for broadcast addr */
-	struct	sock_addr_in ia_sockmask; /* reserve space for general netmask */
+	struct	_sockaddr_in ia_addr;	/* reserve space for interface name */
+	struct	_sockaddr_in ia_dstaddr; /* reserve space for broadcast addr */
+	struct	_sockaddr_in ia_sockmask; /* reserve space for general netmask */
 	struct	in_multi *ia_multiaddrs; /* list of multicast addresses */
 };
 

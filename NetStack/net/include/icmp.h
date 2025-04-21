@@ -10,7 +10,7 @@ struct icmp {
 
     union {
         unsigned char   ih_pptr;
-        struct in_addr_r  addr;   
+        struct _in_addr  addr;   
         struct ih_idseq {
             unsigned short  icmp_id;
             unsigned short  icmp_seq;

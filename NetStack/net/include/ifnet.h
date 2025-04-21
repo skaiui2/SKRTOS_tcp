@@ -13,9 +13,9 @@ typedef err_rt (*ifnet_fn)(struct buf_struct *p, struct ifnet *net);
 struct ifnet {
     struct ifnet *if_next;
     struct list_node *if_addrlist;
-    struct in_addr_r ipaddr;
-    struct in_addr_r netmask;
-    struct in_addr_r gw;
+    struct _in_addr ipaddr;
+    struct _in_addr netmask;
+    struct _in_addr gw;
     unsigned char hwaddr[6];
     unsigned short mtu;
     void *state;
@@ -28,9 +28,9 @@ struct ifnet {
 
 struct ifaddr {
     struct  ifaddr *ifa_next;
-	struct	sock_addr *ifa_addr;	/* address of interface */
-	struct	sock_addr *ifa_dstaddr;	/* other end of p-to-p link */
-	struct	sock_addr *ifa_netmask;	/* used to determine subnet */
+	struct	_sockaddr *ifa_addr;	/* address of interface */
+	struct	_sockaddr *ifa_dstaddr;	/* other end of p-to-p link */
+	struct	_sockaddr *ifa_netmask;	/* used to determine subnet */
 	struct	ifnet *ifa_ifp;		/* back-pointer to interface */
 	void	(*ifa_rtrequest)();	/* check or clean routes (+ or -)'d */
 	unsigned short	ifa_flags;		/* mostly rt_flags for cloning */

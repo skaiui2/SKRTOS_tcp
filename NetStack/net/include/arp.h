@@ -45,7 +45,7 @@ struct arp_cache {
 
 void arp_init();
 
-int arp_resolve(struct arpcom *ac, struct rtentry *rt, struct buf_struct *sk, struct sock_addr *dst, unsigned char *desten);
+int arp_resolve(struct arpcom *ac, struct rtentry *rt, struct buf_struct *sk, struct _sockaddr *dst, unsigned char *desten);
 void arp_request(struct arpcom *ac, unsigned int *sip, unsigned int *tip, unsigned char *addr);
 
 void arp_input();

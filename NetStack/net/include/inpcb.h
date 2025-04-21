@@ -9,9 +9,9 @@ struct inpcb {
 	struct	inpcb *inp_next;
     struct  inpcb *inp_prev;
 	struct	inpcb *inp_head;	
-	struct	in_addr_r inp_faddr;	
+	struct	_in_addr inp_faddr;	
 	unsigned short	inp_fport;		
-	struct	in_addr_r inp_laddr;	
+	struct	_in_addr inp_laddr;	
 	unsigned short	inp_lport;
 	struct	socket *inp_socket;
 	void	*inp_ppcb;		

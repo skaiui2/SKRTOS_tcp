@@ -5,7 +5,10 @@
 #include "socket_var.h"
 #include "inpcb.h"
 #include "route.h"
+#include "socket.h"
 
+
+unsigned short src_port;
 void udp_input(struct buf_struct *sk, int iphlen)
 {
     struct udpiphdr *ui;
@@ -24,6 +27,8 @@ void udp_input(struct buf_struct *sk, int iphlen)
 
     ui = (struct udpiphdr *)ip;
     uh = &(ui->ui_u);
+
+	src_port = ui->ui_u.uh_sport;
 
     udp_len = ntohs(uh->uh_ulen);
 
@@ -45,22 +50,31 @@ void udp_input(struct buf_struct *sk, int iphlen)
         }
 	}
 	*ip = save_ip;
-	ip->ip_src.addr = htonl(ip->ip_src.addr);
 
 	sk->data += sizeof(struct udphdr);
 	sk->data_len -= sizeof(struct udphdr);
 
-    udp_output(0, sk, 0, 0); 
+	struct list_node *sc_node;
+	for(sc_node = SockQue.next; sc_node != &SockQue; sc_node = sc_node->next) {
+		struct sock *sc = container_of(sc_node, struct sock, node);
+		sc->data = sk->data;
+		sc->data_len = sk->data_len;
+		sc->sk = sk;
+		sc->port = uh->uh_sport;
+		sem_post(&sc->sem);
+	}
+
 }
 
 
 
-int udp_output(struct inpcb *inp, struct buf_struct *sk, struct buf_struct  *addr, struct buf_struct *control)
+int udp_output(struct inpcb *inp, struct buf_struct *sk, struct _sockaddr  *sc)
 {
     register struct udpiphdr *ui;
+	struct _sockaddr_in *addr;
 	int len;;
 	struct route rt;
-	struct sock_addr_in *sa;
+	struct _sockaddr_in *sa;
 	struct ip_struct *ip;
 	int s, error = 0;
 
@@ -69,7 +83,7 @@ int udp_output(struct inpcb *inp, struct buf_struct *sk, struct buf_struct  *add
 	ui = (struct udpiphdr *)(sk->data - sizeof(struct udpiphdr));
 	ip = (struct ip_struct *)ui;
 
-	print_ip(ip->ip_src.addr);
+	addr = (struct _sockaddr_in *)sc;
 	
 	ui->ui_i.ih_next = ui->ui_i.ih_prev = 0;
 	ui->ui_i.ih_x1 = 0;
@@ -83,9 +97,10 @@ int udp_output(struct inpcb *inp, struct buf_struct *sk, struct buf_struct  *add
 	ui->ui_u.uh_dport = inp->inp_fport;
 	*/
 	print_ip(ui->ui_i.ih_src.addr);
-	ui->ui_i.ih_dst.addr = htonl(ui->ui_i.ih_src.addr);
+	ui->ui_i.ih_dst = addr->sin_addr;
 	ui->ui_i.ih_src = OwnerNet.ipaddr;
-	ui->ui_u.uh_dport = ui->ui_u.uh_sport;
+	//ui->ui_u.uh_dport = ui->ui_u.uh_sport;
+	ui->ui_u.uh_dport = addr->sin_port;
 	ui->ui_u.uh_sport = htons(1234);
 
 	ui->ui_u.uh_ulen = ui->ui_i.ih_len;
@@ -96,15 +111,13 @@ int udp_output(struct inpcb *inp, struct buf_struct *sk, struct buf_struct  *add
 		ui->ui_u.uh_sum = 0xffff;
 	}
     
-	sa = (struct sock_addr_in *)&rt.ro_dst;
+	sa = (struct _sockaddr_in *)&rt.ro_dst;
     sa->sin_family = AF_INET;
     sa->sin_addr.addr = ui->ui_i.ih_dst.addr;
 	print_ip(sa->sin_addr.addr);
     sa->sin_len = sizeof(*sa);
 
 	printf("udpout\r\n");
-	print_content((char *)sk->data_buf, 60);
-
 	sk->data -= sizeof(struct udpiphdr);
 	sk->data_len += sizeof(struct udpiphdr);
 	sk->type = ip->ip_p;

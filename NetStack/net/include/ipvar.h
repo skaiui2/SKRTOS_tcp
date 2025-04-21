@@ -12,8 +12,8 @@ struct ipovly {
 	unsigned char	ih_x1;		
 	unsigned char	ih_pr;		
 	short	ih_len;			
-	struct	in_addr_r ih_src;		
-	struct	in_addr_r ih_dst;	
+	struct	_in_addr ih_src;		
+	struct	_in_addr ih_dst;	
 }__attribute__((packed));
 
 

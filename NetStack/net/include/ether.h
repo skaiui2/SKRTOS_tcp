@@ -21,7 +21,7 @@ struct eth_hdr {
 struct	arpcom {
 	struct 	ifnet ac_if;		/* network-visible interface */
 	unsigned char	ac_enaddr[6];		/* ethernet hardware address */
-	struct	in_addr_r ac_ipaddr;	/* copy of ip address- XXX */
+	struct	_in_addr ac_ipaddr;	/* copy of ip address- XXX */
 	struct	ether_multi *ac_multiaddrs; /* list of ether multicast addrs */
 	int	ac_multicnt;		/* length of ac_multiaddrs list */	
 };
@@ -40,7 +40,7 @@ struct ether_multi {
 void eth_init();
 void ether_input();
 
-void ether_output(struct ifnet *ifp, struct buf_struct *sk, struct sock_addr *dst, struct rtentry *rt);
+void ether_output(struct ifnet *ifp, struct buf_struct *sk, struct _sockaddr *dst, struct rtentry *rt);
 
 
 #endif
