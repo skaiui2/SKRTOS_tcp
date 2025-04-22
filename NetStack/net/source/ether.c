@@ -36,10 +36,15 @@ void ether_input()
     }
 
     struct eth_hdr *eh = (struct eth_hdr *)sk->data;
-
+    if ((memcmp(eh->ether_dhost, OwnerNet.hwaddr, 6) == 0) || 
+        (memcmp(eh->ether_dhost, broadcast_mac, 6) == 0)) {
+        printf("skbuf input\r\n");
+    }else {
+        goto freeit;
+    }
     sk->data += sizeof(struct eth_hdr);
     sk->data_len -= sizeof(struct eth_hdr);
-
+    
     switch (ntohs(eh->ether_type))
     {
     case ETH_P_ARP:
@@ -64,6 +69,8 @@ void ether_input()
     default:
         break;
     }
+
+freeit:
     buf_free(sk);
 }
 
@@ -83,6 +90,7 @@ void ether_output(struct ifnet *ifp, struct buf_struct *sk, struct _sockaddr *ds
         sk->data -= sizeof(struct eth_hdr);
         sk->data_len += sizeof(struct eth_hdr);
         eh = (struct eth_hdr *)sk->data;
+
         switch (dst->sa_family)
         {
         case AF_INET:
@@ -111,6 +119,7 @@ void ether_output(struct ifnet *ifp, struct buf_struct *sk, struct _sockaddr *ds
 
         tapif_output(sk, sk->data_len);
         EthOutQue_remove_tail(sk);
+        buf_free(sk);
     }
 }
 

@@ -5,49 +5,45 @@
 #include "macro.h"
 
 
-struct list_node SockQue;
+struct list_node InpQue;
 
-int append(int port, struct buf_struct *sk)
+
+struct inpcb *_socket(int inp_protocol)
 {
-
-
+    struct inpcb* inp = heap_malloc(sizeof(struct inpcb));
+    list_node_init(&InpQue);
+    sem_init(&inp->sem, 0, 0);
+    inp->inp_protocol = inp_protocol;
+    return inp;
 }
 
 
-int _socket()
+int _bind(struct _sockaddr *addr, struct inpcb *inp)
 {
-    list_node_init(&SockQue);
+    struct _sockaddr_in *s_in = (struct _sockaddr_in *)addr; 
+    inp->inp_lport = s_in->sin_port;
+    list_add(&InpQue, &inp->node);
 }
 
-
-struct sock *_bind(int port)
-{
-    struct sock* sc = heap_malloc(sizeof(struct sock));
-    sem_init(&sc->sem, 0, 0);
-    sc->port = port;
-    list_add(&SockQue, &sc->node);
-    return sc;
-}
-
-int _recvfrom(char *str, struct sock *sc, struct _sockaddr *addr)
+int _recvfrom(char *str, struct inpcb *inp, struct _sockaddr *addr)
 {  
     struct _sockaddr_in *socket;
     socket = (struct _sockaddr_in *)addr;
-    sem_wait(&sc->sem);
-    memcpy(str, sc->data, 10);
-    socket->sin_port = sc->port;
-    buf_free(sc->sk);
+    sem_wait(&inp->sem);
+    memcpy(str, inp->sk->data, 10);
+    socket->sin_addr = inp->inp_laddr;
+    socket->sin_port = inp->inp_fport;
 
-    return sc->data_len;
+    return inp->sk->data_len;
 }
 
 
-int _sendto(char *str, int len, struct sock * sc, struct _sockaddr *addr)
+int _sendto(char *str, int len, struct inpcb * inp, struct _sockaddr *addr)
 {
 
     struct _sockaddr_in *socket;
-    struct buf_struct *sk = buf_get(sizeof(len));
-    sk->data += 50;
+    struct buf_struct *sk = buf_get(len);
+    sk->data += 60;
     sk->data_len = len;
 
     socket = (struct _sockaddr_in *)addr;
@@ -58,10 +54,7 @@ int _sendto(char *str, int len, struct sock * sc, struct _sockaddr *addr)
         exit(EXIT_FAILURE);
     }
 
-    sk->type = IPPROTO_UDP;
-
-    /*
-    switch () {
+    switch (inp->inp_protocol) {
     case IPPROTO_UDP:
         sk->type = IPPROTO_UDP;
         break;
@@ -77,7 +70,6 @@ int _sendto(char *str, int len, struct sock * sc, struct _sockaddr *addr)
     default:
         sk->type = 0;
     }
-    */
 
     memcpy(sk->data, str, len);
     udp_output(0, sk, addr);

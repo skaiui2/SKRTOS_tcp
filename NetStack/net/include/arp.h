@@ -7,6 +7,8 @@
 #include "socket.h"
 
 extern struct list_node ArpInQue;
+extern unsigned char broadcast_mac[6];
+
 
 
 

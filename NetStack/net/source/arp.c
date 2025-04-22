@@ -15,7 +15,7 @@
 struct arp_cache AcHead;
 struct list_node ArpInQue;
 
-static unsigned char broadcast_mac[6] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+unsigned char broadcast_mac[6] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
 
 void arp_init()
@@ -114,7 +114,6 @@ void arp_request(struct arpcom *ac, unsigned int *sip, unsigned int *tip, unsign
     
     ether_output(&OwnerNet, sk, &sa, (struct rtentry *)0);
 
-    buf_free(sk);
 }
 
 
@@ -177,6 +176,8 @@ void arp_input()
         if (ac_node == &(AcHead.node)) {
             ac = heap_malloc(sizeof(struct arp_cache));
             ac->ipaddr = ap->arp_spa;
+            printf("ac.ip has add\r\n");
+            print_ip(ac->ipaddr);
             arp_cache_add_tail(ac);
         }
 

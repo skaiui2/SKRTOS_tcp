@@ -7,7 +7,7 @@
 
 #include <semaphore.h>
 
-extern struct list_node SockQue;
+extern struct list_node InpQue;
 
 
 struct _sockaddr {
@@ -17,20 +17,14 @@ struct _sockaddr {
 }__attribute__((packed));
 
 
-struct sock {
-    struct list_node node;
-    unsigned int port;
-    int data_len;
-    struct buf_struct *sk;
-    void *data;
-    sem_t sem;
-};
 
-int _socket();
 
-struct sock *_bind(int port);
-int _recvfrom(char *str, struct sock *sc, struct _sockaddr *addr);
+struct inpcb *_socket(int inp_protocol);
 
-int _sendto(char *str, int len, struct sock * sc, struct _sockaddr *addr);
+int _bind(struct _sockaddr *addr, struct inpcb *inp);
+int _recvfrom(char *str, struct inpcb *inp, struct _sockaddr *addr);
+
+int _sendto(char *str, int len, struct inpcb *inp, struct _sockaddr *addr);
 
 #endif
+

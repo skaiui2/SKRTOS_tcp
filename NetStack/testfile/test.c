@@ -41,20 +41,27 @@ void *net_thread(void *arg)
     }
 }
 
-#define SERVER_IP "192.168.1.200"  // Target server IP
-#define SERVER_PORT 1234           // Target server port
+
+#define SERVER_IP "192.168.1.200"  
+#define SERVER_PORT 1234        
 #define BUFFER_SIZE 1024
 void *udp_thread(void *arg) 
 {
-    struct _sockaddr_in client;
+    struct _sockaddr_in serv_addr, client;
     char buffer[BUFFER_SIZE];
-    struct sock *sc;
+    struct inpcb *inp;
 
-    _socket();
-    sc = _bind(SERVER_PORT);
+    inp = _socket(IPPROTO_UDP);
+
+    memset(&serv_addr, 0, sizeof(serv_addr));
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_addr.addr = INADDR_ANY; 
+    serv_addr.sin_port = htons(SERVER_PORT);
+
+    _bind((struct _sockaddr *)&serv_addr, inp);
 
     while (1) {
-        int n = _recvfrom(buffer, sc, (struct _sockaddr *)&client);
+        int n = _recvfrom(buffer, inp, (struct _sockaddr *)&client);
         if (n < 0) {
             perror("Recvfrom error");
             continue;
@@ -63,7 +70,7 @@ void *udp_thread(void *arg)
         printf("Received : %s\n", buffer);
 
         strcpy(buffer, "hello world!");
-        _sendto(buffer, 14, sc, (struct _sockaddr *)&client);
+        _sendto(buffer, 14, inp, (struct _sockaddr *)&client);
     }
    
 }

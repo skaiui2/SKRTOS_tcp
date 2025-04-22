@@ -14,7 +14,7 @@ Due to the complexity of developing the protocol stack directly on network card 
 
 none.
 
-Currently, the stack is under development and supports basic **ARP** and **IP** functionalities. It doesn't have a lot of features.
+Currently, the stack is under development and supports basic functionalities. It doesn't have a lot of features.
 
 ### **How to Clone and Set Up the Stack**
 
@@ -154,6 +154,26 @@ Received: Lx
 ```
 
 If output this, show the SKRTOS_tcp has received message "Lx", then send it to UDP-client.
+
+
+
+### Test TCP
+
+**scan port**
+
+```
+skaiuijing@ubuntu:~/Documents$ nmap -Pn 192.168.1.200 -p 1234
+
+Starting Nmap 7.60 ( https://nmap.org ) at 2025-04-22 07:51 PDT
+Nmap scan report for 192.168.1.200
+Host is up (0.00021s latency).
+
+PORT     STATE SERVICE
+1234/tcp open  hotline
+
+Nmap done: 1 IP address (1 host up) scanned in 0.02 seconds
+
+```
 
 
 

@@ -3,7 +3,7 @@
 
 
 #define alignment_byte               0x07
-#define config_heap   (60*1024)
+#define config_heap   (100*1024)
 #define MLEN 256
 
 #define  TCPT_NTIMERS 4

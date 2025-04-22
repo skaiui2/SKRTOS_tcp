@@ -3,13 +3,14 @@
 #include "macro.h"
 #include "buf.h"
 #include "tcpvar.h"
+#include "socket.h"
 
 
 struct tcphdr {
     unsigned short  th_sport;
     unsigned short  th_dport;
-    unsigned long   th_seq;
-    unsigned long   th_ack;
+    unsigned int   th_seq;
+    unsigned int   th_ack;
     //little ENDIAN!!!
     unsigned char   th_x2:4;
     unsigned char   th_off:4;
@@ -24,9 +25,8 @@ struct tcphdr {
 void tcp_init();
 void tcp_input(struct buf_struct *sk, int iphlen);
 
-int tcp_output(struct tcpcb *tp);
 
-
+int tcp_output(struct tcpcb *tp, struct buf_struct *sk, struct _sockaddr  *sc);
 
 #endif
 
