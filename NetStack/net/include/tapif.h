@@ -5,8 +5,8 @@
 
 
 int tapif_init();
-struct buf_struct *tapif_input();
-int tapif_output(struct buf_struct *sk, uint16_t len);
+struct buf *tapif_input();
+int tapif_output(struct buf *sk, uint16_t len);
 void tapif_thread();
 
 extern int fd;

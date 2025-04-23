@@ -8,7 +8,7 @@
 #include "socket.h"
 
 
-void udp_input(struct buf_struct *sk, int iphlen)
+void udp_input(struct buf *sk, int iphlen)
 {
     struct udpiphdr *ui;
     struct udphdr *uh;
@@ -65,7 +65,7 @@ void udp_input(struct buf_struct *sk, int iphlen)
 
 
 
-int udp_output(struct inpcb *inp, struct buf_struct *sk, struct _sockaddr  *sc)
+int udp_output(struct inpcb *inp, struct buf *sk, struct _sockaddr  *sc)
 {
     register struct udpiphdr *ui;
 	struct _sockaddr_in *addr;

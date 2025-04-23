@@ -37,10 +37,10 @@ int tapif_init()
     return fd;
 }
 
-struct buf_struct *tapif_input()
+struct buf *tapif_input()
 {
     char buf[MLEN];
-    struct buf_struct *sk;
+    struct buf *sk;
     int readlen = read(fd, buf, MLEN);
     
     if (readlen < 0) {
@@ -62,7 +62,7 @@ struct buf_struct *tapif_input()
 }
 
 
-int tapif_output(struct buf_struct *sk, uint16_t len)
+int tapif_output(struct buf *sk, uint16_t len)
 {
   char buf[256]; 
   ssize_t written;

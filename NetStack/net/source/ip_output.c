@@ -11,7 +11,7 @@ unsigned short	ip_id = 2;
 #define	IP_OFFMASK 0x1fff		/* mask for fragmenting bits */
 
 
-int ip_output(struct buf_struct *sk, struct route *rt)
+int ip_output(struct buf *sk, struct route *rt)
 {
     struct _sockaddr_in *sa;
     struct ip_struct *ip;

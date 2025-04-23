@@ -12,13 +12,13 @@ void ip_init()
     list_node_init(&IpInQue);
 }
 
-void ip_InQue_add_tail(struct buf_struct *sk)
+void ip_InQue_add_tail(struct buf *sk)
 {
     list_add(&IpInQue, &(sk->node));
 
 }
 
-void ip_InQue_remove_tail(struct buf_struct *sk)
+void ip_InQue_remove_tail(struct buf *sk)
 {
     list_remove(IpInQue.prev);
 }
@@ -29,7 +29,7 @@ void ip_InQue_remove_tail(struct buf_struct *sk)
 void ip_input()
 {
     struct list_node *first_node;
-    struct buf_struct *sk;
+    struct buf *sk;
     struct ip_struct *ip;
     unsigned short csum;
     int hlen;
@@ -38,7 +38,7 @@ void ip_input()
     while(first_node != &IpInQue) {
         list_remove(first_node);
 
-        sk  = container_of(first_node, struct buf_struct, node);
+        sk  = container_of(first_node, struct buf, node);
         first_node = first_node->next;
 
         ip = (struct ip_struct *)sk->data;

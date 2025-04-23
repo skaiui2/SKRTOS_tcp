@@ -9,7 +9,7 @@ extern struct ifnet OwnerNet;
 extern struct rtentry RouteEntry;
 
 
-typedef err_rt (*ifnet_fn)(struct buf_struct *p, struct ifnet *net);
+typedef err_rt (*ifnet_fn)(struct buf *p, struct ifnet *net);
 struct ifnet {
     struct ifnet *if_next;
     struct list_node *if_addrlist;

@@ -12,7 +12,7 @@
 
 void net_init()
 {
-    pool_buf_handle = mempool_creat(sizeof(struct buf_struct), 20);
+    pool_buf_handle = mempool_creat(sizeof(struct buf), 20);
     eth_init();
     arp_init();
     ip_init();

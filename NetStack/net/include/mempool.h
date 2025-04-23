@@ -10,7 +10,7 @@ void mempool_free(void *xRet);
 void mempool_delete(PoolHeadHandle ThePool);
 
 /*
- * use it for buf_struct.
+ * use it for buf.
 */
 extern PoolHeadHandle pool_buf_handle;
 

@@ -28,7 +28,7 @@ struct icmp {
 
 
 
-void icmp_input(struct buf_struct *sk, int hlen);
+void icmp_input(struct buf *sk, int hlen);
 void icmp_error();
 void icmp_reflect();
 void icmp_send();

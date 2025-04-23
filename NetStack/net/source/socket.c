@@ -42,7 +42,7 @@ int _sendto(char *str, int len, struct inpcb * inp, struct _sockaddr *addr)
 {
 
     struct _sockaddr_in *socket;
-    struct buf_struct *sk = buf_get(len);
+    struct buf *sk = buf_get(len);
     sk->data += 60;
     sk->data_len = len;
 

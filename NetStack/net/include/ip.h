@@ -31,9 +31,9 @@ void ip_init();
 void ip_input();
 
 
-int ip_output(struct buf_struct *sk, struct route *rt);
+int ip_output(struct buf *sk, struct route *rt);
 
-void ip_forward(struct buf_struct *sk, int  opts);
+void ip_forward(struct buf *sk, int  opts);
 
 
 

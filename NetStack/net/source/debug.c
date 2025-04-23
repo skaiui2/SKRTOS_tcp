@@ -1,7 +1,7 @@
 #include "debug.h"
 
 
-void print_buf_content(struct buf_struct *buf, int len) 
+void print_buf_content(struct buf *buf, int len) 
 {
     if (!buf) {
         fprintf(stderr, "Buffer structure is NULL.\n");

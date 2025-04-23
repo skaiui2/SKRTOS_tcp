@@ -22,11 +22,15 @@ struct tcphdr {
 
 
 
+
+
+void tcp_respond(struct tcpcb *tp, struct buf *sk, tcp_seq ack, tcp_seq seq, int flags);
+
 void tcp_init();
-void tcp_input(struct buf_struct *sk, int iphlen);
+void tcp_input(struct buf *sk, int iphlen);
 
 
-int tcp_output(struct tcpcb *tp, struct buf_struct *sk, struct _sockaddr  *sc);
+int tcp_output(struct tcpcb *tp, struct buf *sk, struct _sockaddr  *sc);
 
 #endif
 

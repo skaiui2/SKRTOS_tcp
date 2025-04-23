@@ -37,19 +37,19 @@ void arp_cache_remove_tail(struct arp_cache *ac)
 
 
 
-void arp_InQue_add_tail(struct buf_struct *sk)
+void arp_InQue_add_tail(struct buf *sk)
 {
     list_add(&ArpInQue, &(sk->node));
 
 }
 
-void arp_InQue_remove_tail(struct buf_struct *sk)
+void arp_InQue_remove_tail(struct buf *sk)
 {
     list_remove(ArpInQue.prev);
     
 }
 
-int arp_resolve(struct arpcom *ac, struct rtentry *rt, struct buf_struct *sk, struct _sockaddr *dst, unsigned char *desten)
+int arp_resolve(struct arpcom *ac, struct rtentry *rt, struct buf *sk, struct _sockaddr *dst, unsigned char *desten)
 {
     struct arp_cache *acc;
     struct list_node *ac_node;
@@ -80,13 +80,13 @@ int arp_resolve(struct arpcom *ac, struct rtentry *rt, struct buf_struct *sk, st
 
 void arp_request(struct arpcom *ac, unsigned int *sip, unsigned int *tip, unsigned char *addr)
 {
-    struct buf_struct *sk;
+    struct buf *sk;
     struct eth_hdr *eh;
     struct arp_ether  *ae;
     struct arp_hdr *ah;
     struct _sockaddr sa;
 
-    sk = buf_get(sizeof(struct buf_struct));
+    sk = buf_get(sizeof(struct buf));
     sk->data += sizeof(struct eth_hdr);
     sk->data_len += sizeof(struct arp_ether);
 
@@ -117,7 +117,7 @@ void arp_request(struct arpcom *ac, unsigned int *sip, unsigned int *tip, unsign
 }
 
 
-static void arp_reply(struct buf_struct *sk)
+static void arp_reply(struct buf *sk)
 {
     struct _sockaddr sa;
     struct eth_hdr *eh;  
@@ -147,7 +147,7 @@ static void arp_reply(struct buf_struct *sk)
 
 void arp_input()
 { 
-    struct buf_struct *sk;
+    struct buf *sk;
     struct arp_ether *ap;
     struct arp_hdr *ah;
     struct list_node *ai_node;
@@ -159,7 +159,7 @@ void arp_input()
     ai_node = ArpInQue.next;
     while(ai_node != &ArpInQue) 
     {
-        sk  = container_of(ai_node, struct buf_struct, node);
+        sk  = container_of(ai_node, struct buf, node);
         ac_node = ai_node->next;
         list_remove(ai_node);
         ai_node = ac_node;
@@ -182,7 +182,7 @@ void arp_input()
         }
 
         for(ac_node = EthOutQue.next; ac_node != &EthOutQue; ac_node = ac_node->next) {
-            sk = container_of(ac_node, struct buf_struct, node);
+            sk = container_of(ac_node, struct buf, node);
             ip = (struct ip_struct *)sk->data;
             eh = (struct eth_hdr *)(sk->data - sizeof(struct eth_hdr));
             if (ip->ip_dst.addr == ap->arp_spa) {

@@ -23,12 +23,17 @@ struct socket {
 		unsigned long	sb_mbcnt;	/* chars of mbufs used */
 		unsigned long	sb_mbmax;	/* max chars of bufs to use */
 		long	sb_lowat;	/* low water mark */
-		struct	buf_struct *sb_mb;	/* the buf chain */
+		struct	buf *sb_mb;	/* the buf chain */
 		short	sb_flags;	/* flags, see below */
 		short	sb_timeo;	/* timeout for read/write */
 	} so_rcv, so_snd;
 
 };
+
+#define	sbspace(sb) \
+    ((long) imin((int)((sb)->sb_hiwat - (sb)->sb_cc), \
+	 (int)((sb)->sb_mbmax - (sb)->sb_mbcnt)))
+
 
 
 #endif

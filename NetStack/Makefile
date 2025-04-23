@@ -526,29 +526,101 @@ net/source/tapif.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/tapif.c.s
 .PHONY : net/source/tapif.c.s
 
-net/source/tcp.o: net/source/tcp.c.o
-.PHONY : net/source/tcp.o
+net/source/tcp_input.o: net/source/tcp_input.c.o
+.PHONY : net/source/tcp_input.o
 
 # target to build an object file
-net/source/tcp.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/tcp.c.o
-.PHONY : net/source/tcp.c.o
+net/source/tcp_input.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/tcp_input.c.o
+.PHONY : net/source/tcp_input.c.o
 
-net/source/tcp.i: net/source/tcp.c.i
-.PHONY : net/source/tcp.i
+net/source/tcp_input.i: net/source/tcp_input.c.i
+.PHONY : net/source/tcp_input.i
 
 # target to preprocess a source file
-net/source/tcp.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/tcp.c.i
-.PHONY : net/source/tcp.c.i
+net/source/tcp_input.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/tcp_input.c.i
+.PHONY : net/source/tcp_input.c.i
 
-net/source/tcp.s: net/source/tcp.c.s
-.PHONY : net/source/tcp.s
+net/source/tcp_input.s: net/source/tcp_input.c.s
+.PHONY : net/source/tcp_input.s
 
 # target to generate assembly for a file
-net/source/tcp.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/tcp.c.s
-.PHONY : net/source/tcp.c.s
+net/source/tcp_input.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/tcp_input.c.s
+.PHONY : net/source/tcp_input.c.s
+
+net/source/tcp_output.o: net/source/tcp_output.c.o
+.PHONY : net/source/tcp_output.o
+
+# target to build an object file
+net/source/tcp_output.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/tcp_output.c.o
+.PHONY : net/source/tcp_output.c.o
+
+net/source/tcp_output.i: net/source/tcp_output.c.i
+.PHONY : net/source/tcp_output.i
+
+# target to preprocess a source file
+net/source/tcp_output.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/tcp_output.c.i
+.PHONY : net/source/tcp_output.c.i
+
+net/source/tcp_output.s: net/source/tcp_output.c.s
+.PHONY : net/source/tcp_output.s
+
+# target to generate assembly for a file
+net/source/tcp_output.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/tcp_output.c.s
+.PHONY : net/source/tcp_output.c.s
+
+net/source/tcp_suber.o: net/source/tcp_suber.c.o
+.PHONY : net/source/tcp_suber.o
+
+# target to build an object file
+net/source/tcp_suber.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/tcp_suber.c.o
+.PHONY : net/source/tcp_suber.c.o
+
+net/source/tcp_suber.i: net/source/tcp_suber.c.i
+.PHONY : net/source/tcp_suber.i
+
+# target to preprocess a source file
+net/source/tcp_suber.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/tcp_suber.c.i
+.PHONY : net/source/tcp_suber.c.i
+
+net/source/tcp_suber.s: net/source/tcp_suber.c.s
+.PHONY : net/source/tcp_suber.s
+
+# target to generate assembly for a file
+net/source/tcp_suber.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/tcp_suber.c.s
+.PHONY : net/source/tcp_suber.c.s
+
+net/source/tcp_timer.o: net/source/tcp_timer.c.o
+.PHONY : net/source/tcp_timer.o
+
+# target to build an object file
+net/source/tcp_timer.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/tcp_timer.c.o
+.PHONY : net/source/tcp_timer.c.o
+
+net/source/tcp_timer.i: net/source/tcp_timer.c.i
+.PHONY : net/source/tcp_timer.i
+
+# target to preprocess a source file
+net/source/tcp_timer.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/tcp_timer.c.i
+.PHONY : net/source/tcp_timer.c.i
+
+net/source/tcp_timer.s: net/source/tcp_timer.c.s
+.PHONY : net/source/tcp_timer.s
+
+# target to generate assembly for a file
+net/source/tcp_timer.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/tcp_timer.c.s
+.PHONY : net/source/tcp_timer.c.s
 
 net/source/udp.o: net/source/udp.c.o
 .PHONY : net/source/udp.o
@@ -656,9 +728,18 @@ help:
 	@echo "... net/source/tapif.o"
 	@echo "... net/source/tapif.i"
 	@echo "... net/source/tapif.s"
-	@echo "... net/source/tcp.o"
-	@echo "... net/source/tcp.i"
-	@echo "... net/source/tcp.s"
+	@echo "... net/source/tcp_input.o"
+	@echo "... net/source/tcp_input.i"
+	@echo "... net/source/tcp_input.s"
+	@echo "... net/source/tcp_output.o"
+	@echo "... net/source/tcp_output.i"
+	@echo "... net/source/tcp_output.s"
+	@echo "... net/source/tcp_suber.o"
+	@echo "... net/source/tcp_suber.i"
+	@echo "... net/source/tcp_suber.s"
+	@echo "... net/source/tcp_timer.o"
+	@echo "... net/source/tcp_timer.i"
+	@echo "... net/source/tcp_timer.s"
 	@echo "... net/source/udp.o"
 	@echo "... net/source/udp.i"
 	@echo "... net/source/udp.s"

@@ -16,8 +16,8 @@ struct udphdr {
 }__attribute__((packed));
 
 
-void udp_input(struct buf_struct *sk, int iphlen);
-int udp_output(struct inpcb *inp, struct buf_struct *sk, struct _sockaddr *sc);
+void udp_input(struct buf *sk, int iphlen);
+int udp_output(struct inpcb *inp, struct buf *sk, struct _sockaddr *sc);
 
 
 

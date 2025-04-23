@@ -17,19 +17,19 @@ void eth_init()
 
 
 
-void EthOutQue_add_tail(struct buf_struct *sk)
+void EthOutQue_add_tail(struct buf *sk)
 {
     list_add(&EthOutQue, &sk->node);
 }
 
-void EthOutQue_remove_tail(struct buf_struct *sk)
+void EthOutQue_remove_tail(struct buf *sk)
 {
     list_remove(&sk->node);
 }
 
 void ether_input()
 {
-    struct buf_struct *sk = tapif_input();
+    struct buf *sk = tapif_input();
     if (sk == NULL) {
         SYS_ERROR("SK none!");
         return;
@@ -74,19 +74,18 @@ freeit:
     buf_free(sk);
 }
 
-void ether_output(struct ifnet *ifp, struct buf_struct *sk, struct _sockaddr *dst, struct rtentry *rt)
+void ether_output(struct ifnet *ifp, struct buf *sk, struct _sockaddr *dst, struct rtentry *rt)
 {
     struct eth_hdr *eh;
     struct eth_hdr *pkt;
     struct list_node *sk_node;
 
     EthOutQue_add_tail(sk);
-    for(sk_node = EthOutQue.next; sk_node != &EthOutQue; sk_node = sk_node->next) {
+    for(sk_node = EthOutQue.next; sk_node != &EthOutQue; sk_node = sk_node->next) {   
+        sk = container_of(sk_node, struct buf, node);
         if (sk->flags == BLOCK) {
             continue;
         }
-        sk = container_of(sk_node, struct buf_struct, node);
-
         sk->data -= sizeof(struct eth_hdr);
         sk->data_len += sizeof(struct eth_hdr);
         eh = (struct eth_hdr *)sk->data;

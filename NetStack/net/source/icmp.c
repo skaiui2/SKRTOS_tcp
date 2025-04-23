@@ -6,7 +6,7 @@
 #include "route.h"
 
 
-void icmp_send(struct buf_struct *sk, struct buf_struct *opts)
+void icmp_send(struct buf *sk, struct buf *opts)
 {
     struct ip_struct *ip;
     struct _sockaddr_in *sa;
@@ -28,9 +28,9 @@ void icmp_send(struct buf_struct *sk, struct buf_struct *opts)
 }
 
 
-void icmp_reflect(struct buf_struct *sk)
+void icmp_reflect(struct buf *sk)
 {
-    struct buf_struct *opts;
+    struct buf *opts;
     unsigned short len;
     len = sk->data_len + sizeof(struct ip_struct) + sizeof(struct eth_hdr);
     struct icmp *send_icp = (struct icmp *)sk->data;
@@ -41,7 +41,7 @@ void icmp_reflect(struct buf_struct *sk)
     icmp_send(sk, opts);
 }
 
-void icmp_input(struct buf_struct *sk, int hlen)
+void icmp_input(struct buf *sk, int hlen)
 {
     struct icmp *icp;
     icp = (struct icmp *)sk->data;
