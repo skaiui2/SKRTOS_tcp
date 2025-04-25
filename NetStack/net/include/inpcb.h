@@ -6,8 +6,9 @@
 #include "in.h"
 
 
+
 struct inpcb {
-    struct list_node node;	
+    struct list_node node;
 	struct	_in_addr inp_faddr;	
 	unsigned short	inp_fport;		
 	struct	_in_addr inp_laddr;	
@@ -15,6 +16,7 @@ struct inpcb {
 	struct	buf *sk;
     sem_t sem;
 	int inp_protocol;
+	void  *inp_ppcb;
 
 	struct	socket *inp_socket;
 	struct	route inp_route;
@@ -24,17 +26,26 @@ struct inpcb {
 };
 
 
-int in_pcballoc(struct socket *so, struct inpcb *head);
+
+
+int in_pcballoc(struct socket *so, struct list_node *head);
 int in_pcbfree(struct inpcb *inp);
-struct inpcb *in_pcblookup(struct inpcb *head, struct _in_addr faddr, struct _in_addr laddr, 
-							unsigned int fport, unsigned int lport, int flags);
-int in_pcbbind(struct inpcb *inp, struct buf *sk);
-int in_pcbconnect(struct inpcb *inp, struct buf sk);
+struct inpcb *in_pcblookup(struct list_node *head, struct _in_addr faddr, struct _in_addr laddr, 
+							unsigned int fport, unsigned int lport);
+
+int in_pcbbind(struct inpcb *inp, struct _sockaddr_in *sin);
+
+int in_pcbconnect(struct inpcb *inp, struct _sockaddr_in *fsin);
 int in_pcbdisconnect(struct inpcb *inp);
-int in_setsockaddr(struct inpcb *inp, struct buf *sk);
-int in_setpeeraddr(struct inpcb *inp, struct buf *sk);
+
+int in_setsockaddr(struct inpcb *inp, struct _sockaddr_in *lsin);
+
+int in_setpeeraddr(struct inpcb *inp, struct _sockaddr_in *fsin);
 int in_pcbnotify();
 void in_rtchange(struct inpcb *inp, int errno);
 int in_losing(struct inpcb *inp);
+
+
+
 
 #endif 

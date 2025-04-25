@@ -49,7 +49,7 @@ int tcp_output(struct tcpcb *tp, struct buf *sk, struct _sockaddr  *sc)
 	print_ip(sa->sin_addr.addr);
     sa->sin_len = sizeof(*sa);
 
-    sk->type = 0x06;
+    sk->type = IPPROTO_TCP;
 	printf("tcpout\r\n");
     
     ip_output(sk, &rt);

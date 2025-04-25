@@ -18,6 +18,7 @@ void net_init()
     ip_init();
     tcp_init();
 
+
     ifnet_init("192.168.1.200", "9e:4d:9e:e3:48:9f", 150);
 }
 

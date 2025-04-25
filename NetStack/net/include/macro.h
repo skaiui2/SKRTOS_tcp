@@ -146,7 +146,7 @@ do {    \
 #define ICMP_ADDRESSREPLY	18	/* Address Mask Reply		*/
 #define NR_ICMP_TYPES		18
 
-
+/*
 #define AF_UNSPEC      0   // Unspecified protocol family, used for generic sockets or unspecified addresses
 #define AF_INET        2   // IPv4 protocol family, used for IPv4 network communication
 #define AF_INET6       10  // IPv6 protocol family, used for IPv6 network communication
@@ -169,7 +169,7 @@ do {    \
 #define IPPROTO_SCTP    0x84  // SCTP (Stream Control Transmission Protocol)
 #define IPPROTO_RAW     0xFF  // RAW 数据包协议
 
-
+*/
 
 
 #endif 

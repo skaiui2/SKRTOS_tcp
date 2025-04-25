@@ -3,6 +3,8 @@
 #include "route.h"
 #include "ifnet.h"
 #include "tcp_fsm.h"
+#include "debug.h"
+
 
 
 void tcp_respond(struct tcpcb *tp, struct buf *sk, tcp_seq ack, tcp_seq seq, int flags)
@@ -11,11 +13,9 @@ void tcp_respond(struct tcpcb *tp, struct buf *sk, tcp_seq ack, tcp_seq seq, int
 	struct _sockaddr_in *sa;
     register int tlen;
 	int win = 0;
-	struct route *ro = 0;
+	struct route ro;
 
     int len = sk->data_len;
-	sk->data -= sizeof(struct tcpiphdr);
-	sk->data_len += sizeof(struct tcpiphdr);
 
     ti = (struct tcpiphdr *)sk->data;
 
@@ -49,7 +49,7 @@ void tcp_respond(struct tcpcb *tp, struct buf *sk, tcp_seq ack, tcp_seq seq, int
     ti->ti_t.th_sum = 0;
     ti->ti_t.th_sum = in_checksum(ti, sk->data_len);
 
-    sa = (struct _sockaddr_in *)&(ro->ro_dst);
+    sa = (struct _sockaddr_in *)&(ro.ro_dst);
     sa->sin_family = AF_INET;
     sa->sin_addr.addr = ti->ti_i.ih_dst.addr;
 	print_ip(sa->sin_addr.addr);

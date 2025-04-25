@@ -310,6 +310,30 @@ net/source/in_cksum.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/in_cksum.c.s
 .PHONY : net/source/in_cksum.c.s
 
+net/source/inpcb.o: net/source/inpcb.c.o
+.PHONY : net/source/inpcb.o
+
+# target to build an object file
+net/source/inpcb.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/inpcb.c.o
+.PHONY : net/source/inpcb.c.o
+
+net/source/inpcb.i: net/source/inpcb.c.i
+.PHONY : net/source/inpcb.i
+
+# target to preprocess a source file
+net/source/inpcb.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/inpcb.c.i
+.PHONY : net/source/inpcb.c.i
+
+net/source/inpcb.s: net/source/inpcb.c.s
+.PHONY : net/source/inpcb.s
+
+# target to generate assembly for a file
+net/source/inpcb.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/inpcb.c.s
+.PHONY : net/source/inpcb.c.s
+
 net/source/ip_input.o: net/source/ip_input.c.o
 .PHONY : net/source/ip_input.o
 
@@ -701,6 +725,9 @@ help:
 	@echo "... net/source/in_cksum.o"
 	@echo "... net/source/in_cksum.i"
 	@echo "... net/source/in_cksum.s"
+	@echo "... net/source/inpcb.o"
+	@echo "... net/source/inpcb.i"
+	@echo "... net/source/inpcb.s"
 	@echo "... net/source/ip_input.o"
 	@echo "... net/source/ip_input.i"
 	@echo "... net/source/ip_input.s"
