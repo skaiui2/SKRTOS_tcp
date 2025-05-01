@@ -19,12 +19,19 @@ struct _sockaddr {
 
 
 
+void socket_init();
 struct inpcb *_socket(int inp_protocol);
 
-int _bind(struct _sockaddr *addr, struct inpcb *inp);
+int _bind(struct inpcb *inp, struct _sockaddr *addr);
+int _connect(struct inpcb *inp, struct _sockaddr *addr);
 int _recvfrom(char *str, struct inpcb *inp, struct _sockaddr *addr);
 
 int _sendto(char *str, int len, struct inpcb *inp, struct _sockaddr *addr);
+
+int _shutdown(struct inpcb *inp, int how);
+
+int _close(struct inpcb *inp);
+
 
 #endif
 

@@ -41,6 +41,7 @@ struct ifaddr {
 
 
 
+void parse_mac_address(const char *mac, unsigned char hwaddr[6]);
 void ifnet_init(char *ip, char *mac, unsigned short mtu);
 
 

@@ -49,7 +49,7 @@ void arp_InQue_remove_tail(struct buf *sk)
     
 }
 
-int arp_resolve(struct arpcom *ac, struct rtentry *rt, struct buf *sk, struct _sockaddr *dst, unsigned char *desten)
+int arp_resolve(struct buf *sk, struct _sockaddr *dst)
 {
     struct arp_cache *acc;
     struct list_node *ac_node;
@@ -73,12 +73,13 @@ int arp_resolve(struct arpcom *ac, struct rtentry *rt, struct buf *sk, struct _s
 
     if (ac_node == &(AcHead.node)) {
         sk->flags = BLOCK;
-        arp_request(ac, &(OwnerNet.ipaddr.addr), &ipaddr, desten);        
+        arp_request(&(OwnerNet.ipaddr.addr), &ipaddr);        
     }
     return 0;
 }
 
-void arp_request(struct arpcom *ac, unsigned int *sip, unsigned int *tip, unsigned char *addr)
+
+void arp_request(unsigned int *sip, unsigned int *tip)
 {
     struct buf *sk;
     struct eth_hdr *eh;
@@ -112,7 +113,7 @@ void arp_request(struct arpcom *ac, unsigned int *sip, unsigned int *tip, unsign
     sa.sa_family = AF_UNSPEC;
     sa.sa_len = sizeof(sa);
     
-    ether_output(&OwnerNet, sk, &sa, (struct rtentry *)0);
+    ether_output(&OwnerNet, sk, &sa);
 
 }
 
@@ -141,7 +142,7 @@ static void arp_reply(struct buf *sk)
 	sa.sa_family = AF_UNSPEC;
 	sa.sa_len = sizeof(sa);
 
-    ether_output(&OwnerNet, sk, &sa, (struct rtentry *)0);  
+    ether_output(&OwnerNet, sk, &sa);  
 }
 
 
@@ -183,11 +184,16 @@ void arp_input()
 
         for(ac_node = EthOutQue.next; ac_node != &EthOutQue; ac_node = ac_node->next) {
             sk = container_of(ac_node, struct buf, node);
-            ip = (struct ip_struct *)sk->data;
-            eh = (struct eth_hdr *)(sk->data - sizeof(struct eth_hdr));
-            if (ip->ip_dst.addr == ap->arp_spa) {
+            ip = (struct ip_struct *)(sk->data + sizeof(struct eth_hdr));
+            eh = (struct eth_hdr *)(sk->data);
+            print_ip(ip->ip_dst.addr);
+            print_ip(ap->arp_spa);
+            if (ip->ip_dst.addr == ap->arp_spa) { 
                 memcpy(eh->ether_dhost, ap->arp_sha, 6);
+                print_mac(eh->ether_dhost);
+                printf("ARP_INPUT get mac\r\n");
                 sk->flags = READY;
+                ether_send(sk);
             }
         }
         memcpy(ac->hwaddr, ap->arp_sha, 6);

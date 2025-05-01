@@ -27,6 +27,15 @@ void EthOutQue_remove_tail(struct buf *sk)
     list_remove(&sk->node);
 }
 
+void ether_send(struct buf *sk)
+{
+    printf("ether output len: %d\r\n",sk->data_len);
+    print_content((char *)sk->data, sk->data_len);
+    tapif_output(sk, sk->data_len);
+    EthOutQue_remove_tail(sk);
+    buf_free(sk);
+}
+
 void ether_input()
 {
     struct buf *sk = tapif_input();
@@ -74,7 +83,7 @@ freeit:
     buf_free(sk);
 }
 
-void ether_output(struct ifnet *ifp, struct buf *sk, struct _sockaddr *dst, struct rtentry *rt)
+void ether_output(struct ifnet *ifp, struct buf *sk, struct _sockaddr *dst)
 {
     struct eth_hdr *eh;
     struct eth_hdr *pkt;
@@ -86,20 +95,27 @@ void ether_output(struct ifnet *ifp, struct buf *sk, struct _sockaddr *dst, stru
         if (sk->flags == BLOCK) {
             continue;
         }
+        
         sk->data -= sizeof(struct eth_hdr);
         sk->data_len += sizeof(struct eth_hdr);
         eh = (struct eth_hdr *)sk->data;
+        memcpy(eh->ether_shost, ifp->hwaddr, 6);
 
         switch (dst->sa_family)
         {
         case AF_INET:
-            if (arp_resolve(0, rt, sk, dst, 0)) {
-                pkt = (struct eth_hdr *)dst;
-                memcpy(eh->ether_dhost, pkt->ether_dhost, 6);
-                printf("ether_output mac get\r\n");
-                print_mac(eh->ether_dhost);
-            }	
+            
 		    eh->ether_type = htons(ETHERTYPE_IP);
+            /*
+            if (arp_resolve(sk, dst)) {
+                printf("ether_output mac get\r\n");
+                pkt = (struct eth_hdr *)dst;
+                memcpy(eh->ether_dhost, pkt->ether_dhost, 6); 
+                print_mac(eh->ether_dhost);
+            } 
+            */
+            parse_mac_address("c2:36:da:52:f6:11", eh->ether_dhost); 
+
             break;
         case AF_UNSPEC:
             pkt = (struct eth_hdr *)dst->sa_data;
@@ -110,15 +126,8 @@ void ether_output(struct ifnet *ifp, struct buf *sk, struct _sockaddr *dst, stru
         default:
             break;
         } 
-
-        memcpy(eh->ether_shost, ifp->hwaddr, 6);
-
-        printf("ether output len: %d\r\n",sk->data_len);
-        print_content((char *)sk->data, sk->data_len);
-
-        tapif_output(sk, sk->data_len);
-        EthOutQue_remove_tail(sk);
-        buf_free(sk);
+        ether_send(sk);
+        
     }
 }
 

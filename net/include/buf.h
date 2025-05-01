@@ -12,11 +12,12 @@
 
 struct buf {
     struct list_node node; 
-    uint16_t    tol_len;
+    uint16_t    tol_len;    //pure message size
     uint16_t    data_len;
     uint8_t     *data;
     uint8_t     type;
     uint8_t     flags;
+    struct _sockaddr  *sin;
     uint8_t     data_buf[MLEN];
 
 };

@@ -8,7 +8,8 @@ struct ifnet OwnerNet;
 struct rtentry RouteEntry;
 
 
-void parse_mac_address(const char *mac, unsigned char hwaddr[6]) {
+void parse_mac_address(const char *mac, unsigned char hwaddr[6]) 
+{
     char mac_copy[18]; 
     strncpy(mac_copy, mac, sizeof(mac_copy) - 1);
     mac_copy[sizeof(mac_copy) - 1] = '\0'; 

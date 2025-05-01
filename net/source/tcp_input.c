@@ -5,12 +5,24 @@
 #include "debug.h"
 #include "tcp_fsm.h"
 #include "memalloc.h"
+#include <pthread.h>
+
+sem_t sem_con;
 
 struct list_node TcpInpcb;
+
+/*
+void tcp_init()
+{
+    list_node_init(&TcpInpcb);
+}
+*/
+
 
 void tcp_init()
 {
     list_node_init(&TcpInpcb);
+    sem_init(&sem_con, 0, 0);
 
     struct _sockaddr_in *address = heap_malloc(sizeof(struct _sockaddr_in));
     struct socket *so = heap_malloc(sizeof(struct socket));
@@ -39,7 +51,10 @@ void tcp_input(struct buf *sk, int iphlen)
     struct ip_struct save_ip;
     int len, tlen, off;
 
-    ti = (struct tcpiphdr *)(sk->data - iphlen);
+    sk->data -= iphlen;
+    sk->data_len += iphlen;
+
+    ti = (struct tcpiphdr *)sk->data;
     ip = (struct ip_struct *)ti;
     save_ip = *ip;
 	
@@ -79,10 +94,8 @@ void tcp_input(struct buf *sk, int iphlen)
 
     struct inpcb *inp = in_pcblookup(&TcpInpcb, ip->ip_src, ip->ip_dst, ti->ti_t.th_sport, ti->ti_t.th_dport);
     struct tcpcb *tp = inp->inp_ppcb;
-    
-    sk->data += sizeof(struct tcpiphdr) + off - sizeof(struct tcphdr);
-    sk->data_len -= sizeof(struct tcpiphdr) + off - sizeof(struct tcphdr);
-    
+    printf("tp_stat:%d\r\n", tp->t_state);
+
     struct _sockaddr_in *sin;
     int flags = ti->ti_t.th_flags;
     switch (tp->t_state)
@@ -110,13 +123,12 @@ void tcp_input(struct buf *sk, int iphlen)
 			goto free;
 		}
 
-	    sk->data -= sizeof(struct tcpiphdr)+ off - sizeof(struct tcphdr);
-	    sk->data_len += sizeof(struct tcpiphdr)+ off - sizeof(struct tcphdr);
-            unsigned int ack = ntohl(ti->ti_t.th_seq) + 1;
-            unsigned int seq = 75863; 
-            flags = ti->ti_t.th_flags | TH_ACK;
-            tcp_respond(tp, sk, ack, seq, flags);
-            break;
+        unsigned int ack = ntohl(ti->ti_t.th_seq) + 1;
+        unsigned int seq = 75863; 
+        flags |= TH_ACK;
+        printf("listen\r\n");
+        tcp_respond(tp, sk, ack, seq, flags);
+        
         
 
     break;
@@ -127,10 +139,19 @@ void tcp_input(struct buf *sk, int iphlen)
         }
         
         if (flags & TH_ACK) { 
-            unsigned int ack = htonl(ntohl(ti->ti_t.th_seq) + 1);
-            unsigned int seq = htonl(75863); 
-            flags = ti->ti_t.th_flags |= TH_ACK;
+            unsigned int ack = ntohl(ti->ti_t.th_seq) + 1;
+            printf("ack:%d\r\n", ack);
+
+            unsigned int seq = ntohl(ti->ti_t.th_ack); 
+            printf("seq:%d\r\n", seq);
+
+            flags |= TH_ACK;
+
+            printf("syn_sent\r\n");
+            tp->rcv_nxt = ack;
+            tp->snd_nxt = seq;
             tcp_respond(tp, sk, ack, seq, TH_ACK);
+            sem_post(&sem_con);
             break;
         }
 

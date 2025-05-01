@@ -37,7 +37,7 @@ int ip_output(struct buf *sk, struct route *rt)
     ip->ip_sum = 0;
     ip->ip_sum = in_checksum(ip, hlen);
 
-    ether_output(&OwnerNet, sk, (struct _sockaddr *)sa, (struct rtentry *)0);
+    ether_output(&OwnerNet, sk, (struct _sockaddr *)sa);
     return true;
 }
 

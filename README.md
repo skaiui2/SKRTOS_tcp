@@ -150,10 +150,10 @@ then output:
 
 ```
 Sent: Lx
-Received: Lx
+Received: hello world!
 ```
 
-If output this, show the SKRTOS_tcp has received message "Lx", then send it to UDP-client.
+If output this, show the SKRTOS_tcp has received message "Lx", then send “hello world!” to UDP-client.
 
 
 
@@ -176,4 +176,22 @@ Nmap done: 1 IP address (1 host up) scanned in 0.02 seconds
 ```
 
 
+
+**three handle**
+
+```
+$: cd testdoc
+$: gcc tcp_handle.c -o handle
+$: ./handle
+```
+
+then output:
+
+```
+Server is listening on port 8080...
+Client connected: 192.168.1.200:1234
+Received data: Hello, linux Server!
+Sent response to client.
+Closed connection with client.
+```
 

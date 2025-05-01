@@ -32,13 +32,20 @@ struct class
  * If we know a,b both less than the half of number axis.
  * Spill or not,if a is ahead of b, return true.Or else, return flase.
  */
-#define COMPARE_LT(a, b) ((int)(a - b) > 0)
-#define COMPARE_LET(a, b) ((int)(a - b) >= 0)
+#define COMPARE_GT(a, b) ((int)(a - b) > 0)
+#define COMPARE_GET(a, b) ((int)(a - b) >= 0)
+
+
+#define min(a, b) ((a) < (b) ? (a) : (b))
+#define imin(a, b) ((int)(a) < (int)(b) ? (int)(a) : (int)(b))
+
+
 
 
 typedef char err_rt;
 typedef int  err_code;
 
+#define GET   2
 #define BLOCK 1
 #define READY 0
 #define ERROR (-1)

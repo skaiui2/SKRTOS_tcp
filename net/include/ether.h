@@ -40,7 +40,8 @@ struct ether_multi {
 void eth_init();
 void ether_input();
 
-void ether_output(struct ifnet *ifp, struct buf *sk, struct _sockaddr *dst, struct rtentry *rt);
+void ether_send(struct buf *sk);
+void ether_output(struct ifnet *ifp, struct buf *sk, struct _sockaddr *dst);
 
 
 #endif

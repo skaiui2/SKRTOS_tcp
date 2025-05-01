@@ -6,7 +6,7 @@ struct buf *buf_get(uint16_t size)
 {
     struct buf *sk = mempool_alloc(pool_buf_handle);
     *sk = (struct buf) {
-        .tol_len = STRUCT_SIZE_PRE(struct buf, data_buf) + size,
+        .tol_len = 0,
         .data_len = 0,
         .data = sk->data_buf,
         .type = BUF_DATA,

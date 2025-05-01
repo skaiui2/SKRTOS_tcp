@@ -22,8 +22,27 @@ typedef	unsigned int	tcp_seq;
 #define	TCPOOB_HAVEDATA	0x01
 #define	TCPOOB_HADDATA	0x02
 
+
+/*
+Send Sequence Variables
+|---snd_una---|||---snd_nxt---|||---snd_max---|
+                ^snd_wnd
+
+compare: snd_una < snd_nxt <= snd_max
+
+Receive Sequence Variables
+|---rcv_nxt---|||---rcv_adv---|
+               ^rcv_wnd
+
+Congestion Control
+|---snd_cwnd---|||---snd_ssthresh---|
+ *
+ *
+*/
+
+
 struct tcpcb {
-    struct list_node *node;
+    struct list_node node;
 	short	t_state;		/* state of this connection */
 	short	t_timer[TCPT_NTIMERS];	/* tcp timers */
 	short	t_rxtshift;		/* log(2) of rexmt exp. backoff */
