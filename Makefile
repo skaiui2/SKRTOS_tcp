@@ -478,6 +478,30 @@ net/source/queue.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/queue.c.s
 .PHONY : net/source/queue.c.s
 
+net/source/radix.o: net/source/radix.c.o
+.PHONY : net/source/radix.o
+
+# target to build an object file
+net/source/radix.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/radix.c.o
+.PHONY : net/source/radix.c.o
+
+net/source/radix.i: net/source/radix.c.i
+.PHONY : net/source/radix.i
+
+# target to preprocess a source file
+net/source/radix.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/radix.c.i
+.PHONY : net/source/radix.c.i
+
+net/source/radix.s: net/source/radix.c.s
+.PHONY : net/source/radix.s
+
+# target to generate assembly for a file
+net/source/radix.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NetStack.dir/build.make CMakeFiles/NetStack.dir/net/source/radix.c.s
+.PHONY : net/source/radix.c.s
+
 net/source/route.o: net/source/route.c.o
 .PHONY : net/source/route.o
 
@@ -746,6 +770,9 @@ help:
 	@echo "... net/source/queue.o"
 	@echo "... net/source/queue.i"
 	@echo "... net/source/queue.s"
+	@echo "... net/source/radix.o"
+	@echo "... net/source/radix.i"
+	@echo "... net/source/radix.s"
 	@echo "... net/source/route.o"
 	@echo "... net/source/route.i"
 	@echo "... net/source/route.s"

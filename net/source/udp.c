@@ -43,9 +43,7 @@ void udp_input(struct buf *sk, int iphlen)
 		if (uh->uh_sum = in_checksum(ip, sk->data_len + sizeof(struct ip_struct))) {
 			SYS_ERROR("udp error!!!\r\n");
 			return;
-		} else {
-            printf("right!\r\n");
-        }
+		} 
 	}
 	*ip = save_ip;
 
@@ -98,7 +96,6 @@ int udp_output(struct inpcb *inp, struct buf *sk, struct _sockaddr  *sc)
 	*/
 
 	addr = (struct _sockaddr_in *)sc;
-	print_ip(ui->ui_i.ih_src.addr);
 	ui->ui_i.ih_dst = addr->sin_addr;
 	ui->ui_i.ih_src = OwnerNet.ipaddr;
 	ui->ui_u.uh_dport = addr->sin_port;

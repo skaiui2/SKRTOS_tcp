@@ -56,7 +56,6 @@ struct buf *tapif_input()
         return NULL;
     }
     buf_copy(sk, buf, MLEN);
-    printf("read\r\n"); 
     print_content(sk->data_buf, readlen);
     return sk;
 }

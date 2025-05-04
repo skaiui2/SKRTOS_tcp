@@ -87,7 +87,6 @@ int tcp_output(struct tcpcb *tp, struct buf *sk)
     sa = (struct _sockaddr_in *)&rt.ro_dst;
     sa->sin_family = AF_INET;
     sa->sin_addr.addr = ti->ti_i.ih_dst.addr;
-	print_ip(sa->sin_addr.addr);
     sa->sin_len = sizeof(*sa);
 
     sk->type = IPPROTO_TCP;

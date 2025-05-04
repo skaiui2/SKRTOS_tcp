@@ -78,8 +78,6 @@ void tcp_input(struct buf *sk, int iphlen)
     if (csum != 0) {
         printf("csum:%d\r\n", csum);
         SYS_ERROR("tcp input check sum error!\r\n");
-    } else {
-        printf("right\r\n");
     }
 
     *ip =save_ip;
@@ -92,12 +90,18 @@ void tcp_input(struct buf *sk, int iphlen)
     tlen -= off;
     ti->ti_i.ih_len = tlen;
 
+
     struct inpcb *inp = in_pcblookup(&TcpInpcb, ip->ip_src, ip->ip_dst, ti->ti_t.th_sport, ti->ti_t.th_dport);
     struct tcpcb *tp = inp->inp_ppcb;
     printf("tp_stat:%d\r\n", tp->t_state);
 
+
     struct _sockaddr_in *sin;
+    unsigned int ack;
+    unsigned int seq;
     int flags = ti->ti_t.th_flags;
+    printf("flags:%d\r\n", flags);
+
     switch (tp->t_state)
     {
     case TCP_LISTEN:
@@ -123,14 +127,12 @@ void tcp_input(struct buf *sk, int iphlen)
 			goto free;
 		}
 
-        unsigned int ack = ntohl(ti->ti_t.th_seq) + 1;
-        unsigned int seq = 75863; 
+        ack = ntohl(ti->ti_t.th_seq) + 1;
+        seq = 75863; 
         flags |= TH_ACK;
         printf("listen\r\n");
         tcp_respond(tp, sk, ack, seq, flags);
-        
-        
-
+         
     break;
 
     case TCP_SYN_SENT:
@@ -139,13 +141,8 @@ void tcp_input(struct buf *sk, int iphlen)
         }
         
         if (flags & TH_ACK) { 
-            unsigned int ack = ntohl(ti->ti_t.th_seq) + 1;
-            printf("ack:%d\r\n", ack);
-
-            unsigned int seq = ntohl(ti->ti_t.th_ack); 
-            printf("seq:%d\r\n", seq);
-
-            flags |= TH_ACK;
+            ack = ntohl(ti->ti_t.th_seq) + 1;
+            seq = ntohl(ti->ti_t.th_ack); 
 
             printf("syn_sent\r\n");
             tp->rcv_nxt = ack;
@@ -161,6 +158,70 @@ void tcp_input(struct buf *sk, int iphlen)
    
     break;
 
+    case TCP_ESTABLISHED:
+        if (flags == (TH_PUSH | TH_ACK)) {
+            sk->tol_len = sk->data_len - iphlen - off;
+            inp->inp_fport = ti->ti_t.th_sport;
+            inp->sk = sk;
+            void *data = sk->data + iphlen + off;
+            inp->recv_data = heap_malloc(sk->tol_len);
+            inp->recv_len = sk->tol_len;
+            memcpy(inp->recv_data, data, inp->recv_len);
+    
+            ack = ntohl(ti->ti_t.th_seq) + sk->tol_len;
+            seq = ntohl(ti->ti_t.th_ack); 
+
+            printf("ack:%u\r\n", ack);
+            printf("seq:%u\r\n", seq);
+
+            printf("TCP_EST PUSH and ACK\r\n");
+            tp->rcv_nxt = ack;
+            tp->snd_nxt = seq;
+
+            sk->tol_len = 0;
+            sk->data_len = iphlen + off;
+            tcp_respond(tp, sk, ack, seq, TH_ACK);
+
+            sem_post(&(inp->sem));
+        }
+
+        if (flags == (TH_ACK | TH_FIN)) {
+            ack = ntohl(ti->ti_t.th_seq) + 1;
+            printf("ack:%d\r\n", ack);
+
+            seq = ntohl(ti->ti_t.th_ack); 
+            printf("seq:%d\r\n", seq);
+
+            printf("TH_FIN\r\n");
+            tp->rcv_nxt = ack;
+            tp->snd_nxt = seq;
+            tcp_respond(tp, sk, ack, seq, TH_ACK);
+
+            tcp_respond(tp, sk, ack, seq, TH_FIN);
+        }
+
+    break;
+
+
+    case TCP_FIN_WAIT_1:
+        
+        ack = ntohl(ti->ti_t.th_seq) + 1;
+        seq = ntohl(ti->ti_t.th_ack); 
+
+        printf("FIN_WAIT1\r\n");
+        tp->rcv_nxt = ack;
+        tp->snd_nxt = seq;
+
+        sk->tol_len = 0;
+        sk->data_len = iphlen + off;
+        if (flags == (TH_FIN | TH_ACK)) {
+            tcp_respond(tp, sk, ack, seq, TH_ACK);
+        } else {
+            goto free;
+        }
+        
+
+    break;
     default:
 
     break;

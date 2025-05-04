@@ -41,10 +41,10 @@ void tcp_receive_syn_ack(struct tcpcb *tp, struct tcpiphdr *ti);
 void tcp_send_ack(struct tcpcb *tp, struct buf *sk);
 void tcp_send_fin(struct tcpcb *tp, struct buf *sk);
 
-/*
-void tcp_receive_ack(struct tcpcb *tp, struct tcpiphdr *ti);
-void tcp_receive_fin(struct tcpcb *tp, struct tcpiphdr *ti);
-*/
+void tcp_receive_fin(struct tcpcb *tp, struct buf *sk);
+
+void tcp_receive_fin(struct tcpcb *tp, struct buf *sk);
+
 
 
 

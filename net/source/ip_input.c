@@ -42,7 +42,6 @@ void ip_input()
         first_node = first_node->next;
 
         ip = (struct ip_struct *)sk->data;
-        printf("ip len:%d\r\n", ip->ip_len);
         if (ip->ip_v != IPVERSION) {
             SYS_ERROR("It is not IPv4\r\n");
             return;

@@ -13,6 +13,8 @@ void tcp_respond(struct tcpcb *tp, struct buf *sk, tcp_seq ack, tcp_seq seq, int
 	struct _sockaddr_in *sa;
 	int win = 64240;
 	struct route *ro;
+
+    printf("FLAGS:%d\r\n", flags);
  
     if (tp) {
         win = sbspace(&tp->t_inpcb->inp_socket->so_rcv);
@@ -26,13 +28,10 @@ void tcp_respond(struct tcpcb *tp, struct buf *sk, tcp_seq ack, tcp_seq seq, int
 	ti->ti_i.ih_x1 = 0;
 	ti->ti_i.ih_pr = IPPROTO_TCP;
 	ti->ti_i.ih_len = htons(sk->data_len - sizeof(struct ip_struct));
-	printf("ip all length:%d\r\n", htons(ti->ti_i.ih_len));
 
     ti->ti_i.ih_dst = tp->t_inpcb->inp_faddr;
-    print_ip(ti->ti_i.ih_dst.addr);
 
     ti->ti_i.ih_src = tp->t_inpcb->inp_laddr;
-    print_ip(ti->ti_i.ih_src.addr);
 
     ti->ti_t.th_dport = tp->t_inpcb->inp_fport;
     ti->ti_t.th_sport = tp->t_inpcb->inp_lport;
@@ -54,7 +53,6 @@ void tcp_respond(struct tcpcb *tp, struct buf *sk, tcp_seq ack, tcp_seq seq, int
     sa = (struct _sockaddr_in *)&(ro->ro_dst);
     sa->sin_family = AF_INET;
     sa->sin_addr.addr = ti->ti_i.ih_dst.addr;
-	print_ip(sa->sin_addr.addr);
     sa->sin_len = sizeof(*sa);
 
     sk->type = IPPROTO_TCP;
@@ -157,25 +155,31 @@ void tcp_send_ack(struct tcpcb *tp, struct buf *sk)
 
 void tcp_send_fin(struct tcpcb *tp, struct buf *sk) 
 {
-    tcp_respond(tp, sk, tp->rcv_nxt, tp->snd_una, TH_FIN);
+    printf("fin ack:%u\r\n", tp->rcv_nxt);
+    printf("fin seq:%u\r\n", tp->snd_nxt);
+
     tp->t_state = TCP_FIN_WAIT_1;
+    tcp_respond(tp, sk, tp->rcv_nxt, tp->snd_nxt, (TH_FIN | TH_ACK));
 }
 
 
-/*
-void tcp_receive_ack(struct tcpcb *tp, struct tcpiphdr *ti) 
+void tcp_receive_ack(struct tcpcb *tp, struct buf *sk) 
 {
+    struct tcpiphdr *ti = (struct tcpiphdr *)sk->data;
     if (ti->ti_t.th_flags & TH_ACK) {
         tp->t_state = TCP_FIN_WAIT_2;
+        tcp_send_ack(tp, sk); 
     }
 }
 
 
-void tcp_receive_fin(struct tcpcb *tp, struct tcpiphdr *ti) 
+void tcp_receive_fin(struct tcpcb *tp, struct buf *sk) 
 {
+    struct tcpiphdr *ti = (struct tcpiphdr *)sk->data;
     if (ti->ti_t.th_flags & TH_FIN) {
         tp->t_state = TCP_TIME_WAIT;
-        tcp_send_ack(tp, ti); 
+        tcp_send_ack(tp, sk); 
     }
 }
-*/
+
+

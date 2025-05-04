@@ -47,7 +47,7 @@ void ether_input()
     struct eth_hdr *eh = (struct eth_hdr *)sk->data;
     if ((memcmp(eh->ether_dhost, OwnerNet.hwaddr, 6) == 0) || 
         (memcmp(eh->ether_dhost, broadcast_mac, 6) == 0)) {
-        printf("skbuf input\r\n");
+        printf("ether input\r\n");
     }else {
         goto freeit;
     }
@@ -112,9 +112,11 @@ void ether_output(struct ifnet *ifp, struct buf *sk, struct _sockaddr *dst)
                 pkt = (struct eth_hdr *)dst;
                 memcpy(eh->ether_dhost, pkt->ether_dhost, 6); 
                 print_mac(eh->ether_dhost);
-            } 
+            } else {
+                continue;
+            }
             */
-            parse_mac_address("c2:36:da:52:f6:11", eh->ether_dhost); 
+            parse_mac_address("ba:5f:8c:a7:d4:29", eh->ether_dhost); 
 
             break;
         case AF_UNSPEC:

@@ -44,6 +44,7 @@ void print_content(char *buf, uint16_t len)
     if (bytes_to_print % 16 != 0) {
         printf("\n");
     }
+    printf("\r\n");
 }
 
 void print_mac(unsigned char mac[]) {

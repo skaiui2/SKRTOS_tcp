@@ -124,11 +124,18 @@ void *tcp_thread(void *arg)
     _connect(inp, (struct _sockaddr *)&server_addr);
 
     char buffer[20] = {0};
-    strcpy(buffer, "Hello, linux Server!");
+    strcpy(buffer, "Hello,linux Server");
     _sendto(buffer, sizeof(buffer), inp, (struct _sockaddr *)&server_addr);
 
-    printf("Sending ACK to client\n");
-    _shutdown(inp, SHUT_WR); 
+    memset(buffer, 0, sizeof(buffer));
+    int n = _recvfrom(buffer, inp, (struct _sockaddr *)&server_addr);
+    if (n < 0) {
+        perror("Recvfrom error");
+    }
+    buffer[n] = '\0'; 
+    printf("Received: %s\n", buffer);
+
+    _shutdown(inp, SHUT_WR);
 
     _close(inp);  
     while(1) {

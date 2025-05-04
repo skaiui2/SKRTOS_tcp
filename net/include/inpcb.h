@@ -5,8 +5,6 @@
 #include "socket_var.h"
 #include "in.h"
 
-
-
 struct inpcb {
     struct list_node node;
 	struct	_in_addr inp_faddr;	
@@ -15,6 +13,8 @@ struct inpcb {
 	unsigned short	inp_lport;
 	struct	buf *sk;
     sem_t sem;
+	void  *recv_data;
+	int   recv_len;
 	int inp_protocol;
 	void  *inp_ppcb;
 

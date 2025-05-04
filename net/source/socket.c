@@ -78,12 +78,15 @@ int _recvfrom(char *str, struct inpcb *inp, struct _sockaddr *addr)
 {  
     struct _sockaddr_in *socket;
     socket = (struct _sockaddr_in *)addr;
+
     sem_wait(&inp->sem);
-    memcpy(str, inp->sk->data, 10);
+    memcpy(str, inp->recv_data, inp->recv_len);
+    heap_free(inp->recv_data);
+
     socket->sin_addr = inp->inp_laddr;
     socket->sin_port = inp->inp_fport;
-
-    return inp->sk->data_len;
+    printf("inp->recv_len: %d\r\n", inp->recv_len);
+    return inp->recv_len;
 }
 
 
@@ -105,14 +108,14 @@ int _sendto(char *str, int len, struct inpcb *inp, struct _sockaddr *addr)
         udp_output(0, sk, addr);
 
         break;
-    case IPPROTO_TCP:
-    
+    case IPPROTO_TCP: 
         sem_wait(&sem_con);
         sk->type = IPPROTO_TCP;
         sk->data -= sizeof(struct tcpiphdr); 
         sk->data_len += sizeof(struct tcpiphdr);
         struct tcpcb *tp = inp->inp_ppcb;
-        tcp_respond(tp, sk, tp->rcv_nxt, tp->snd_nxt, TH_ACK);
+        tp->t_state = TCP_ESTABLISHED;
+        tcp_respond(tp, sk, tp->rcv_nxt, tp->snd_nxt, (TH_PUSH | TH_ACK));
 
         break;
     case IPPROTO_ICMP:
@@ -127,10 +130,16 @@ int _sendto(char *str, int len, struct inpcb *inp, struct _sockaddr *addr)
 
 }
 
-
+int count = 0;
 int _shutdown(struct inpcb *inp, int how)
 {
-
+    struct buf *sk = buf_get(0);
+    sk->data += 60;
+    sk->type = IPPROTO_TCP;
+    sk->data -= sizeof(struct tcpiphdr); 
+    sk->data_len += sizeof(struct tcpiphdr);
+    
+    tcp_send_fin(inp->inp_ppcb, sk);
 }
 
 

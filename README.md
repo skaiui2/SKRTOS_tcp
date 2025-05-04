@@ -27,7 +27,6 @@ git clone git@github.com:skaiui2/SKRTOS_tcp.git
 Next, create a TAP interface and set the required file permissions:
 
 ```
-cd NetStack
 ./do.sh
 ```
 
@@ -177,7 +176,7 @@ Nmap done: 1 IP address (1 host up) scanned in 0.02 seconds
 
 
 
-**three handle**
+**TCP three handshakes and four waves**
 
 ```
 $: cd testdoc
@@ -185,13 +184,33 @@ $: gcc tcp_handle.c -o handle
 $: ./handle
 ```
 
-then output:
+then linux server output:
 
 ```
-Server is listening on port 8080...
-Client connected: 192.168.1.200:1234
-Received data: Hello, linux Server!
-Sent response to client.
-Closed connection with client.
+Server listening on port 8080...
+Connection from 192.168.1.200:1234
+Received: Hello,linux Server
+Client sent FIN.
+Closed connection properly (FIN sent).
+```
+
+the netstack client output:
+
+```
+Received: Hello, client!
+```
+
+The message is sent by linux server.
+
+In the Linux kernel, the connection closing process may involve three steps instead of the typical four, due to **Delayed ACK** behavior.
+
+**Delayed ACK** is a TCP optimization where the receiver postpones sending an acknowledgment (ACK) for a short time (**40–200 ms**) rather than immediately acknowledging every received packet. This allows multiple packets to be acknowledged at once, reducing network overhead and improving efficiency.
+
+So:
+
+```
+21:21:04.977845 IP 192.168.1.200.1234 > ubuntu.http-alt: Flags [F.], seq 21, ack 15, win 2140, length 0
+21:21:04.977883 IP ubuntu.http-alt > 192.168.1.200.1234: Flags [F.], seq 15, ack 22, win 64219, length 0
+21:21:04.983391 IP 192.168.1.200.1234 > ubuntu.http-alt: Flags [.], ack 16, win 2140, length 0
 ```
 

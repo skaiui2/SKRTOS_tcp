@@ -178,7 +178,6 @@ void arp_input()
             ac = heap_malloc(sizeof(struct arp_cache));
             ac->ipaddr = ap->arp_spa;
             printf("ac.ip has add\r\n");
-            print_ip(ac->ipaddr);
             arp_cache_add_tail(ac);
         }
 
@@ -186,8 +185,6 @@ void arp_input()
             sk = container_of(ac_node, struct buf, node);
             ip = (struct ip_struct *)(sk->data + sizeof(struct eth_hdr));
             eh = (struct eth_hdr *)(sk->data);
-            print_ip(ip->ip_dst.addr);
-            print_ip(ap->arp_spa);
             if (ip->ip_dst.addr == ap->arp_spa) { 
                 memcpy(eh->ether_dhost, ap->arp_sha, 6);
                 print_mac(eh->ether_dhost);
